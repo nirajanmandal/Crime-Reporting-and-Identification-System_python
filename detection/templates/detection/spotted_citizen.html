@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+
+{% block title %} Citizens {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+    {% load static %}
+    <div class="main-content-inner">
+        <div class="row">
+            <div class="col-12 mt-5">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="header-title">Spotted Citizen</h4>
+                        <div style="overflow-x:auto;">
+                            <div class="data-tables datatable-dark">
+                                <table class="table table-dark text-center">
+                                    <thead class="text-capitalize">
+                                    <tr>
+                                        <th>Image</th>
+                                        <th>First Name</th>
+                                        <th>Last Name</th>
+                                        <th>Status</th>
+                                        <th>Date Spotted</th>
+                                        <th>Location</th>
+                                        <th>Action</th>
+                                        <th>Details</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for citizen in citizens %}
+                                        {% if not citizen.status == 'Free' and not citizen.status == 'Found' %}
+                                            <tr>
+                                                <td><img src="{{ citizen.citizen_image.url }}" class="thumbnail rounded-circle" alt="image" width="100" height="100"></td>
+                                                <td>{{ citizen.first_name }}</td>
+                                                <td>{{ citizen.last_name }}</td>
+                                                <td>{{ citizen.status }}</td>
+                                                <td>{{ citizen.updated_at }}</td>
+                                                <td>
+                                                    <a href="{% url 'detection:citizen-location' citizen.pk %}" class="btn btn-dark btn-sm">Location</a>
+                                                </td>
+                                                <td>
+                                                    <a href="{% url 'detection:found-citizen' citizen.pk %}" class="btn btn-success btn-sm">Found</a>
+                                                </td>
+                                                <td>
+                                                    <button type="button" class="btn btn-dark btn-sm" data-toggle="modal" data-target="#id_spotted_citizen{{ citizen.pk }}">
+                                                        Details
+                                                    </button>
+                                                </td>
+
+                                                <!--Details Modal -->
+                                                <div class="modal fade" id="id_spotted_citizen{{ citizen.pk }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                                                    <div class="modal-dialog" role="document">
+                                                        <div class="modal-content bg-dark text-white">
+                                                            <div class="modal-header">
+                                                                <h2 class="modal-title text-white" id="exampleModalLongTitle">Citizen Details</h2>
+                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <strong>First Name: </strong>{{ citizen.first_name }}<br>
+                                                                <strong>Last Name: </strong>{{ citizen.last_name }}<br>
+                                                                <strong>Date of Birth: </strong>{{ citizen.birth_date }}<br>
+                                                                <strong>Gender: </strong>{{ citizen.gender }}<br>
+                                                                <strong>Address: </strong>{{ citizen.address }}<br>
+                                                                <strong>Phone Number: </strong>{{ citizen.phone_number }}<br>
+                                                                <strong>Nationality: </strong>{{ citizen.nationality }}<br>
+                                                                <strong>Citizenship Number: </strong>{{ citizen.citizenship_number }}<br>
+                                                                <strong>Bio: </strong>{{ citizen.bio }}<br>
+                                                                <strong>Date Spotted: </strong>{{ citizen.updated_at }}<br>
+                                                                <strong>Status: </strong>{{ citizen.status }}<br>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                                <a href="{% url 'detection:download-csv-file' citizen.pk %}">
+                                                                    <button type="button" class="btn btn-dark">Download</button>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </tr>
+                                        {% endif %}
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

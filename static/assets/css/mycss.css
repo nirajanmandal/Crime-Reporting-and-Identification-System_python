@@ -1,0 +1,44 @@
+a[data-toggle="collapse"] {
+    position: relative;
+}
+
+.dropdown-toggle::after {
+    display: block;
+    position: absolute;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+}
+
+ul ul a {
+    padding-left: 30px !important;
+}
+#pageSubmenu i, #pageSubmenu2 i{
+    font-size: 1.5em;
+}a[data-toggle="collapse"] {
+    position: relative;
+}
+
+.dropdown-toggle::after {
+    display: block;
+    position: absolute;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+}
+
+ul ul a {
+    padding-left: 30px !important;
+}
+#pageSubmenu i, #pageSubmenu2 i{
+    font-size: 1.5em;
+}
+
+.errorlist{
+    color: red;
+    font-size: 10px;
+}
+
+.alert{
+    font-size: 12px;
+}

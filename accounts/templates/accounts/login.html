@@ -1,0 +1,90 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% include 'includes/css.html' %}
+    <title>Login</title>
+</head>
+
+<body>
+<div class="container pt-md-5">
+    <div class="row mt-5">
+        <div class="col-md-4 offset-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="title">Login</h5>
+                </div>
+
+                <div class="card-body">
+                    <form role="form" method="post" action="">
+                        {% csrf_token %}
+
+
+                        {% if messages %}
+                            {% for message in messages %}
+                                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                                    <strong>{{ message.tags }} ! </strong>{{message}}
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            <br />
+                            Enter your credentials to get access
+                        {% endif %}
+
+                        {% if form.non_field_errors %}
+                            <div class="alert alert-danger">
+                                <ul>
+                                    {% for error in form.non_field_errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                    {% if formset.non_form_errors %}
+                                        <div class="alert alert-danger">
+                                            <ul>
+                                                {% for error in formset.non_form_errors %}
+                                                    <li>{{ error }}</li>
+                                                {% endfor %}
+                                            </ul>
+                                        </div>
+                                    {% endif %}
+                                </ul>
+                            </div>
+                        {% endif %}
+
+                        <div class="row">
+
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Username</label>
+                                    {{ form.username }}
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="row">
+
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Password</label>
+                                    {{ form.password }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card-footer">
+                            <button type="submit" name="login" class="btn btn-fill btn-dark">Login</button>
+                            <br>Don't have an account? <a href="{% url 'accounts:register' %}" class="text-primary">Create</a>
+                        </div>
+
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+

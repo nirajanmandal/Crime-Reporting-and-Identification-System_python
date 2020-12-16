@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %} Dashboard {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+{#    {% if messages %}#}
+{#            {{ messages }}#}
+{#    {% endif %}#}
+    <div class="row">
+        <div class="col-lg-4 col-md-6 mt-5">
+            <div class="card card-bordered text-center">
+                <i class="fas fa-image fa-10x"></i>
+{#                <img class="card-img-top img-fluid" src="{% static  'assets/img/12345.png'%}" alt="image">#}
+                <div class="card-body text-center">
+                    <h5 class="title">Upload Citizen Picture</h5>
+
+                    <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#exampleModalLong">Upload Picture</button>
+                    <div class="modal fade" id="exampleModalLong">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Upload Citizen Picture</h5>
+
+                                </div>
+                                <form method="post" action="{% url 'detection:detect-image' %}" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                    <div class="modal-body">
+                                        <input type="file" name="image" required>
+                                    </div>
+
+                                    <div class="modal-footer">
+                                        <a  type="button" class="btn btn-dark" data-dismiss="modal">Close</a>
+                                        <button type="submit" class="btn btn-dark">Process</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-6 mt-5">
+            <div class="card card-bordered text-center">
+                <i class="fas fa-camera fa-10x"></i>
+                <div class="card-body">
+                    <h5 class="title">Upload Citizen Video</h5>
+                    <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#exampleModalLong">Upload Video</button>
+                    <div class="modal fade" id="exampleModalLong">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Upload Citizen Video</h5>
+
+                                </div>
+                                <form method="post" action="" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                    <div class="modal-body">
+                                        <input type="file" name="image" required>
+                                    </div>
+
+                                    <div class="modal-footer">
+                                        <a  type="button" class="btn btn-dark" data-dismiss="modal">Close</a>
+                                        <button type="submit" class="btn btn-dark">Process</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-lg-4 col-md-6 mt-5">
+            <div class="card card-bordered text-center">
+                <i class="fas fa-video fa-10x"></i>
+{#                <img class="card-img-top img-fluid" src="{% static  'assets/img/mike.jpg' %}" alt="image">#}
+                <div class="card-body text-center">
+                    <h5 class="title">Detect Using Webcam.</h5>
+                    <a href="{% url 'detection:detect-webcam' %}" class="btn btn-dark">Open Webcam</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+    <script>
+        $(document).ready(function() {
+            // Javascript method's body can be found in assets/js/demos.js
+            demo.initDashboardPageCharts();
+
+        });
+    </script>
+
+{% endblock javascripts %}
+
+

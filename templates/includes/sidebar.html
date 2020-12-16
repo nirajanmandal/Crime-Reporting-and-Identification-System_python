@@ -1,0 +1,120 @@
+{% if user.is_authenticated %}
+    <div class="sidebar">
+        <div class="sidebar-wrapper bg-dark">
+
+            <ul class="nav">
+                <li class="active ">
+                    <a href="{% url 'news:list-news' %}">
+                        <i class="tim-icons icon-chart-pie-36"></i>
+                        <p>News</p>
+                    </a>
+                </li>
+                <li>
+                    {% if user.is_superuser and user.is_active %}
+                        <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                            <i class="tim-icons icon-single-02"></i>
+                            <p>Staff</p>
+                        </a>
+                        <ul class="collapse list-unstyled" id="pageSubmenu">
+                            <li>
+                                <a href="{% url 'accounts:register' %}">
+                                    <i class="fa fa-user-plus"></i>
+                                    <p>Add Staff</p>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{% url 'accounts:view-staff' %}">
+                                    <i class="tim-icons icon-zoom-split"></i>
+                                    <p>View Staff</p>
+                                </a>
+
+                            </li>
+                        </ul>
+                    {% endif %}
+
+                {% if user.is_staff and user.is_active and not user.is_superuser %}
+                        <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                            <i class="tim-icons icon-single-02"></i>
+                            <p>Staff</p>
+                        </a>
+                        <ul class="collapse list-unstyled" id="pageSubmenu">
+                            <li>
+                                <a href="{% url 'accounts:view-staff' %}">
+                                    <i class="tim-icons icon-zoom-split"></i>
+                                    <p>View Staff</p>
+                                </a>
+                            </li>
+                        </ul>
+                    {% endif %}
+
+                </li>
+
+                <li>
+                    <a href="#pageSubmenu2" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                        <i class="fa fa-users" aria-hidden="true"></i>
+                        <p>Citizen</p>
+                    </a>
+                    <ul class="collapse list-unstyled" id="pageSubmenu2">
+                        {% if user.is_staff %}
+                            <li>
+                                <a href="{% url 'detection:add-citizen' %}">
+                                    <i class="fa fa-user-plus"></i>
+                                    <p>Add Citizen</p>
+                                </a>
+                            </li>
+                        {% endif %}
+                        <li>
+                            <a href="{% url 'detection:view-citizen' %}">
+                                <i class="tim-icons icon-zoom-split"></i>
+                                <p>View Citizens</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="#pageSubmenu3" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                        <i class="fas fa-file" aria-hidden="true"></i>
+                        <p>Cases</p>
+                    </a>
+                    <ul class="collapse list-unstyled" id="pageSubmenu3">
+                        {% if user.is_staff %}
+                            <li>
+                                <a href="{% url 'cases:add-case' %}">
+                                    <i class="fa fa-user-plus"></i>
+                                    <p>Add Case</p>
+                                </a>
+                            </li>
+                        {% endif %}
+                        <li>
+                            <a href="{% url 'cases:list-case' %}">
+                                <i class="tim-icons icon-zoom-split"></i>
+                                <p>View Case</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="{% url 'accounts:dashboard' %}" >
+                        <i class="fas fa-address-card"></i>
+                        <p>Identify</p>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'detection:spotted-citizen' %}" >
+                        <i class="tim-icons icon-square-pin"></i>
+                        <p>Track</p>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'accounts:logout' %}" >
+                        <i class="tim-icons icon-user-run"></i>
+                        <p>Logout</p>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+{% endif %}
+

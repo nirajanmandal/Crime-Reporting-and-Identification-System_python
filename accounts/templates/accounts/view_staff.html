@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %} Staffs {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+    {% load static %}
+    <div class="main-content-inner">
+        <div class="row">
+            <div class="col-12 mt-5">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="header-title">View Staff</h4>
+                        <div style="overflow-x:auto;">
+                            <div class="data-tables datatable-dark">
+                                <table class="table table-dark text-center">
+                                    <thead class="text-capitalize">
+                                    <tr>
+                                        <th>Image</th>
+                                        <th>First Name</th>
+                                        <th>Last Name</th>
+                                        <th>Username</th>
+                                        <th>Status</th>
+                                        <th>Edit</th>
+                                        <th>Delete</th>
+                                        <th>Details</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% if staff %}
+                                        {% for stf in staff %}
+                                            <tr>
+                                                <td class="col-sm-1"><img src="{{ stf.profile_image.url }}" class="img-responsive rounded-circle" alt="image" style="width: 100%;"></td>
+                                                <td>{{ stf.user.first_name }}</td>
+                                                <td>{{ stf.user.last_name }}</td>
+                                                <td>{{ stf.user.username}}</td>
+                                                <td>{{ stf.status }}</td>
+                                                <td>
+                                                    <a href="{% url 'accounts:update-staff' stf.pk %}">
+                                                        <span style="color: lightblue"><i class="fas fa-edit"></i></span>
+                                                    </a>
+                                                </td>
+
+                                                {% if user.is_superuser %}
+                                                    <td>
+                                                        <a href="#" data-toggle="modal" data-target="#id_staff_delete{{ stf.pk }}">
+                                                            <span style="color: crimson" ><i class="fas fa-trash-alt"></i></span>
+                                                        </a>
+                                                    </td>
+                                                {% endif %}
+
+                                                <td>
+                                                    <!-- Button trigger modal -->
+                                                    <button type="button" class="btn btn-dark btn-sm" data-toggle="modal" data-target="#id_staff{{ stf.pk }}">
+                                                        Details
+                                                    </button>
+                                                </td>
+                                                <!--Details Modal -->
+                                                <div class="modal fade" id="id_staff{{ stf.pk }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                                                    <div class="modal-dialog" role="document">
+                                                        <div class="modal-content bg-dark text-white">
+                                                            <div class="modal-header">
+                                                                <h2 class="modal-title text-white" id="exampleModalLongTitle">Staff Details</h2>
+                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <strong>First Name: </strong>{{ stf.user.first_name }}<br>
+                                                                <strong>Last Name: </strong>{{ stf.user.last_name }}<br>
+                                                                <strong>Username: </strong>{{ stf.user.username }}<br>
+                                                                <strong>Email: </strong>{{ stf.user.email }}<br>
+                                                                <strong>Date of Birth: </strong>{{ stf.birth_date }}<br>
+                                                                <strong>Gender: </strong>{{ stf.gender }}<br>
+                                                                <strong>Phone Number: </strong>{{ stf.phone_number }}<br>
+                                                                <strong>Address: </strong>{{ stf.address }}<br>
+                                                                <strong>Nationality: </strong>{{ stf.nationality }}<br>
+                                                                <strong>Citizenship Number: </strong>{{ stf.citizenship_number }}<br>
+                                                                <strong>Bio: </strong>{{ stf.bio }}<br>
+                                                                <strong>Status: </strong>{{ stf.status }}<br>
+                                                                <strong>is active: </strong>{{ stf.user.is_active }}<br>
+                                                                <strong>is staff: </strong>{{ stf.user.is_staff }}<br>
+                                                                <strong>is superuser: </strong>{{ stf.user.is_superuser }}<br>
+                                                                <strong>Last Login: </strong>{{ stf.user.last_login }}<br>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                                <a href="{% url 'detection:download-csv-file' stf.pk %}">
+                                                                    <button type="button" class="btn btn-dark">Download</button>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!--Delete Modal -->
+                                                <div class="modal fade" id="id_staff_delete{{ stf.pk }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                                                    <div class="modal-dialog" role="document">
+                                                        <div class="modal-content bg-dark text-white">
+                                                            <div class="modal-header">
+                                                                <h2 class="modal-title text-white" id="exampleModalLongTitle">Staff Delete</h2>
+                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <p class="text-white">Are you sure you want to delete "{{ stf.user.first_name }}"?</p>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                                <a href="{% url 'accounts:delete-staff' stf.pk %}">
+                                                                    <button type="button" class="btn btn-danger">Delete</button>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </tr>
+                                        {% endfor %}
+                                    {% else %}
+                                    <tr>
+                                        <td colspan="8">
+                                            <h4 style="color: red">*Data Not Available*</h4>
+                                        </td>
+                                    </tr>
+                                    {% endif %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Dark table end -->
+        </div>
+    </div>
+{% endblock %}

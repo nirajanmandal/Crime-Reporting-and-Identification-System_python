@@ -1,0 +1,55 @@
+<!-- Static assets -->
+{% load static %}
+
+
+{% if user.is_authenticated %}
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-absolute navbar-transparent">
+        <div class="container-fluid">
+            <div class="navbar-wrapper">
+                <h1></h1>
+                <a class="navbar-brand" href="javascript:void(0)">Welcome {{ request.user.first_name }} {{ request.user.last_name  }} {{ request.user.profile.id  }}</a>
+            </div>
+
+            <div class="collapse navbar-collapse" id="navigation">
+                <ul class="navbar-nav ml-auto">
+                    <li class="search-bar input-group">
+                        <button class="btn btn-link" id="search-button" data-toggle="modal" data-target="#searchModal"><i class="tim-icons icon-zoom-split" ></i>
+                            <span class="d-lg-none d-md-block">Search</span>
+                        </button>
+                    </li>
+                    <li class="dropdown nav-item">
+                        <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
+                            <div class="photo">
+                                {% if request.user.profile.profile_image %}
+                                    <img src="{{ request.user.profile.profile_image.url }}" alt="Profile Photo" class="rounded-circle">
+                                {% else %}
+                                    <img src="{% static 'assets/img/default-avatar.png' %}" alt="Profile Photo">
+                                {% endif %}
+                            </div>
+                            <b class="caret d-none d-lg-block d-xl-block"></b>
+                        </a>
+                        <ul class="dropdown-menu dropdown-navbar bg-dark">
+                            <li class="nav-link"><a href="{% url 'accounts:profile' request.user.profile.id  %}" class="nav-item dropdown-item">Profile</a></li>
+                            <li class="dropdown-divider"></li>
+                            <li class="nav-link"><a href="{% url 'accounts:logout' %}" class="nav-item dropdown-item">Logout</a></li>
+                        </ul>
+                    </li>
+                    <li class="separator d-lg-none"></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="modal modal-search fade" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="searchModal" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <label for="inlineFormInputGroup"></label><input type="text" class="form-control" id="inlineFormInputGroup" placeholder="SEARCH">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <i class="tim-icons icon-simple-remove"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}

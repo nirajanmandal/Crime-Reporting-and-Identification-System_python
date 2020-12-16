@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %} News {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+    <div class="main-content-inner">
+        <div class="row">
+            <div class="col-12 mt-5">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="header-title">Delete News</h4>
+                        <!-- Modal -->
+                        <div class="modal fade" id="id_citizen{{ wanted.pk }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content bg-dark text-white">
+                                    <div class="modal-header">
+                                        <h2 class="modal-title text-white" id="exampleModalLongTitle">Wanted Details</h2>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        <a href="{% url 'detection:download-csv-file' %}">
+                                            <button type="button" class="btn btn-dark">Download</button>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Dark table end -->
+        </div>
+    </div>
+{% endblock %}
+{% block js_content %}
+    <script src="{% static  'assets/js/vendor/jquery-2.2.4.min.js' %}"></script>
+{% endblock %}

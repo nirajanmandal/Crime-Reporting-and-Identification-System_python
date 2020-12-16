@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %}Home Page{% endblock title %}
+
+{% block content %}
+    <h2>Home</h2>
+    {% if user.is_authenticated %}
+    <p>You are welcome on Home Page</p>
+    <p>Your name is - {{user.first_name}} {{user.last_name}}</p>
+    <p>Your email is - {{user.email}}</p>
+    <br>
+    <a href="{% url 'accounts:profile' user.id %}">Edit Profile</a>
+    <br><br>
+    <a href="{% url 'accounts:password_change' %}">Change Password</a>
+    <br><br>
+    <a href="{% url 'accounts:logout' %}">Logout</a>
+    {% else %}
+    <a href="{% url 'accounts:login' %}">Login</a>
+    <br><br>
+{#    <a href="{% url 'password_reset' %}">Forgot Password</a>#}
+    <br><br>
+    <a href="{% url 'accounts:register' %}">Sign Up</a>
+    {% endif %}
+{% endblock content %}
