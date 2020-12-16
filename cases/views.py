@@ -30,8 +30,8 @@ class AddCaseView(CreateView):
         if form.is_valid():
             # instance = form.save(commit=False)
             form.save()
-            messages.success(request, 'Wanted people added successfully')
-            return redirect('news:wanted-news')
+            messages.success(request, 'Case added successfully')
+            return redirect('news:list-news')
 
         messages.error(request, 'Please check your credentials again')
         return render(request, self.template_name, {'form': form})

@@ -2,6 +2,7 @@ import csv
 from django.contrib import messages
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404
 import face_recognition
 from PIL import Image, ImageDraw
 import numpy as np
@@ -127,8 +128,12 @@ def found_citizen(request, pk):
 
 @login_required
 def csv_database_write(request, pk):
-    # Get all data from UserDetail Databse Table
-    citizen = CitizenProfile.objects.get(pk=pk)
+    # Get all data from UserDetail Database Table
+    try:
+        citizen = CitizenProfile.objects.get(pk=pk)
+    except CitizenProfile.DoesNotExist:
+        messages.error(request, "Citizen not found")
+        return redirect('detection:view-citizen')
 
     # Create the HttpResponse object with the appropriate CSV header.
     response = HttpResponse(content_type='text/csv')

@@ -19,7 +19,7 @@ STATUS_CHOICES = (
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
-    profile_image = models.ImageField(upload_to='media/citizens', null=False, blank=False)
+    profile_image = models.ImageField(upload_to='citizens/', null=False, blank=False)
     nationality = models.CharField(max_length=50, null=False, blank=False)
     citizenship_number = models.CharField(max_length=50, null=False, blank=False)
     phone_number = models.BigIntegerField(null=False, blank=False)

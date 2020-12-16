@@ -28,12 +28,13 @@
                                 </thead>
                                 <tbody>
                                 {% for new in news %}
+                                    {% if not new.status == "Free" %}
                                     <tr>
                                         <td class="col-sm-1"><img src="{{ new.citizen_image.url }}" class="img-responsive rounded-circle" alt="image" style="width: 100%;"></td>
                                         <td>{{ new.first_name }}</td>
                                         <td>{{ new.last_name }}</td>
                                         <td>{{ new.gender }}</td>
-                                        <td>{{ new.date_of_crime }}</td>
+                                        <td>{{ new.created_at }}</td>
                                         <td>{{ new.status }}</td>
                                         <td>
                                             <!-- Button trigger modal -->
@@ -53,15 +54,18 @@
                                                             </button>
                                                         </div>
                                                         <div class="modal-body">
-                                                            {{ new.first_name }}<br>
-                                                            {{ new.last_name }}<br>
-                                                            {{ new.gender }}<br>
-                                                            {{ new.address }}<br>
-                                                            {{ new.contact_email }}<br>
-                                                            {{ new.contact_number }}<br>
-                                                            {{ new.date_of_case }}<br>
-                                                            {{ new.description }}<br>
-                                                            {{ new.status }}<br>
+                                                            <span class="text-info">First Name: </span>&emsp;{{ new.first_name }}<br>
+                                                            <span class="text-info">Last Name: </span>&emsp;{{ new.last_name }}<br>
+                                                            <span class="text-info">Gender: </span>&emsp;{{ new.gender }}<br>
+                                                            <span class="text-info">Date Of Birth: </span>&emsp;{{ new.birth_date }}<br>
+                                                            <span class="text-info">Address: </span>&emsp;{{ new.address }}<br>
+                                                            <span class="text-info">Nationality: </span>&emsp;{{ new.nationality }}<br>
+                                                            <span class="text-info">Citizenship Number: </span>&emsp;{{ new.citizenship_number }}<br>
+                                                            <span class="text-info">Phone Number: </span>&emsp;{{ new.phone_number }}<br>
+                                                            <span class="text-info">Date of crime: </span>&emsp;{{ new.created_at }}<br>
+                                                            <span class="text-info">Description: </span>&emsp;{{ new.bio }}<br>
+                                                            <span class="text-info">Status: </span>&emsp;{{ new.status }}<br>
+
                                                         </div>
 {#                                                        <div class="modal-footer">#}
 {#                                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>#}
@@ -84,6 +88,7 @@
 {#                                            {% endif %}#}
 {#                                        </td>#}
                                     </tr>
+                                    {% endif %}
                                 {% endfor %}
                                 </tbody>
                             </table>
