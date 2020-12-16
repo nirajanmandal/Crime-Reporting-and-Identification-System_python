@@ -203,7 +203,8 @@ class ProfileEditView(SuccessMessageMixin, UpdateView):
 
                 # messages.success(request, 'Profile was successfully updated')
                 return redirect('accounts:view-staff')
-        messages.error(request, 'Please check your credentials')
+        print(profile_form)
+        messages.warning(request, 'Please check your credentials')
         return HttpResponseRedirect(request.path_info)
 
     def get_context_data(self, **kwargs):
