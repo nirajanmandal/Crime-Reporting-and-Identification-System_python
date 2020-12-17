@@ -106,7 +106,7 @@ class UserLoginView(FormView):
         form = self.form_class()
         if request.user.is_authenticated:
             messages.success(request, 'Already logged in')
-            return redirect('news:list-news')
+            return redirect('accounts:dashboard')
         else:
             return render(request, self.template_name, {'form': form})
 
@@ -120,7 +120,7 @@ class UserLoginView(FormView):
                 if user.is_active:
                     login(request, user)
                     # messages.success(request, 'logged in')
-                    return redirect('news:list-news')
+                    return redirect('accounts:dashboard')
                 else:
                     messages.error(request, 'account not activated')
                     return HttpResponseRedirect(request.path_info)

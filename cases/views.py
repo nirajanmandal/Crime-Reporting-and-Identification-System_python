@@ -44,6 +44,27 @@ class ListCaseView(ListView):
     context_object_name = 'cases'
 
 
+@method_decorator(login_required, name='dispatch')
+class WantedCaseView(ListView):
+    template_name = 'cases/list-wanted.html'
+    model = CasesModel
+    context_object_name = 'cases'
+
+
+@method_decorator(login_required, name='dispatch')
+class MissingCaseView(ListView):
+    template_name = 'cases/list-missing.html'
+    model = CasesModel
+    context_object_name = 'cases'
+
+
+@method_decorator(login_required, name='dispatch')
+class FoundCaseView(ListView):
+    template_name = 'cases/list_cases.html'
+    model = CasesModel
+    context_object_name = 'cases'
+
+
 # @method_decorator(login_required, name='dispatch')
 # class DeleteCaseView(DeleteView):
 #     model = CasesModel

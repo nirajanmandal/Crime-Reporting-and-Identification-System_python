@@ -8,7 +8,7 @@ urlpatterns = [
     # path('', TemplateView.as_view(template_name='main/welcome.html'), name='home'),
     path('', UserLoginView.as_view(), name='index'),
     path('login/', UserLoginView.as_view(), name='login'),
-    path('dashboard/', UserDashboardView.as_view(), name='dashboard'),
+    path('home/', UserDashboardView.as_view(), name='dashboard'),
     path('viewstaff/', ListStaffView.as_view(), name='view-staff'),
     path('updatestaff/<int:pk>/', StaffUpdateView.as_view(), name='update-staff'),
     path('deletestaff/<int:pk>/', delete_staff, name='delete-staff'),

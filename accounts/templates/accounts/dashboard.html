@@ -87,6 +87,24 @@
         </div>
     </div>
 
+    <div class="row">
+        <div class="col-lg-4 col-md-6 mt-5">
+                <div class="card card-bordered text-center">
+                    <div class="card-body text-center">
+                        <a href="{% url 'cases:wanted-list' %}" style="color: red">Wanted</a>
+                    </div>
+                </div>
+            </div>
+
+        <div class="col-lg-4 col-md-6 mt-5">
+            <div class="card card-bordered text-center">
+                <div class="card-body text-center">
+                    <a href="{% url 'cases:missing-list' %}" style="color: yellow">Missing</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
 {% endblock content %}
 
 <!-- Specific Page JS goes HERE  -->
