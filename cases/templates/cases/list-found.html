@@ -13,7 +13,7 @@
             <div class="col-12 mt-5">
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="header-title">Missing List</h4>
+                        <h4 class="header-title">Stranded List</h4>
 
                         <div style="overflow-x:auto;">
                             <table class="table table-dark text-center">
@@ -35,7 +35,7 @@
                                 <tbody>
                                 {% if cases %}
                                     {% for case in cases %}
-                                        {% if case.status == "Missing" %}
+                                        {% if case.status == "Found" %}
                                             <tr>
                                                 <td class="col-sm-1"><img src="{{ case.image.url }}" alt="image" class="img-responsive rounded-circle" style="width: 100%"></td>
                                                 <td>{{ case.first_name }}</td>

@@ -11,7 +11,7 @@ from django.core.files.storage import FileSystemStorage
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView, DetailView, DeleteView, UpdateView
 from django.utils.decorators import method_decorator
-
+from cases.models import CasesModel
 from .forms import CitizenForm
 from .models import CitizenProfile, SpottedCitizen
 from rest_framework.views import APIView
@@ -177,13 +177,22 @@ def detect_image(request):
     files = []
     citizenship_number = []
 
-    citizen = CitizenProfile.objects.all()
-    for crime in citizen:
+    cases = CasesModel.objects.all()
+    for crime in cases:
         images.append(crime.first_name + '_image')
         encodings.append(crime.first_name + '_face_encoding')
         files.append(crime.citizen_image)
         names.append(crime.first_name + ' ' + crime.last_name)
         citizenship_number.append(crime.citizenship_number)
+
+
+    # citizen = CitizenProfile.objects.all()
+    # for crime in citizen:
+    #     images.append(crime.first_name + '_image')
+    #     encodings.append(crime.first_name + '_face_encoding')
+    #     files.append(crime.citizen_image)
+    #     names.append(crime.first_name + ' ' + crime.last_name)
+    #     citizenship_number.append(crime.citizenship_number)
 
     for i in range(0, len(images)):
         try:
@@ -210,7 +219,6 @@ def detect_image(request):
     face_encodings = face_recognition.face_encodings(unknown_image, face_locations)
 
     # Convert the image to a PIL-format image so that we can draw on top of it with the Pillow library
-    # See http://pillow.readthedocs.io/ for more about PIL/Pillow
     pil_image = Image.fromarray(unknown_image)
     # Create a Pillow ImageDraw Draw instance to draw with
     draw = ImageDraw.Draw(pil_image)

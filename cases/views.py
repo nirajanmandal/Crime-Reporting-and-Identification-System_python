@@ -31,7 +31,7 @@ class AddCaseView(CreateView):
             # instance = form.save(commit=False)
             form.save()
             messages.success(request, 'Case added successfully')
-            return redirect('news:list-news')
+            return redirect('accounts:dashboard')
 
         messages.error(request, 'Please check your credentials again')
         return render(request, self.template_name, {'form': form})
@@ -60,7 +60,7 @@ class MissingCaseView(ListView):
 
 @method_decorator(login_required, name='dispatch')
 class FoundCaseView(ListView):
-    template_name = 'cases/list_cases.html'
+    template_name = 'cases/list-found.html'
     model = CasesModel
     context_object_name = 'cases'
 

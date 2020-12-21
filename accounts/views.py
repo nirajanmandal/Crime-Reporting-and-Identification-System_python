@@ -105,7 +105,6 @@ class UserLoginView(FormView):
     def get(self, request, *args, **kwargs):
         form = self.form_class()
         if request.user.is_authenticated:
-            messages.success(request, 'Already logged in')
             return redirect('accounts:dashboard')
         else:
             return render(request, self.template_name, {'form': form})
