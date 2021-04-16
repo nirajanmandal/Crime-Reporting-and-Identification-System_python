@@ -8,7 +8,6 @@
 {% block stylesheets %}{% endblock stylesheets %}
 
 {% block content %}
-    {% load static %}
     <div class="main-content-inner">
         <div class="row">
             <div class="col-12 mt-5">
@@ -24,7 +23,6 @@
                                         <th>First Name</th>
                                         <th>Last Name</th>
                                         <th>Username</th>
-                                        <th>Status</th>
                                         {% if user.is_superuser %}
                                             <th>Edit</th>
                                             <th>Delete</th>
@@ -36,11 +34,11 @@
                                     {% if staff %}
                                         {% for stf in staff %}
                                             <tr>
+                                            {% if stf.user.is_staff and not stf.user.is_superuser  %}
                                                 <td class="col-sm-1"><img src="{{ stf.profile_image.url }}" class="img-responsive rounded-circle" alt="image" style="width: 100%;"></td>
                                                 <td>{{ stf.user.first_name }}</td>
                                                 <td>{{ stf.user.last_name }}</td>
                                                 <td>{{ stf.user.username}}</td>
-                                                <td>{{ stf.status }}</td>
 
                                                 {% if user.is_superuser %}
                                                     <td>
@@ -65,9 +63,9 @@
                                                 <!--Details Modal -->
                                                 <div class="modal fade" id="id_staff{{ stf.pk }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
                                                     <div class="modal-dialog" role="document">
-                                                        <div class="modal-content bg-dark text-white">
+                                                        <div class="modal-content">
                                                             <div class="modal-header">
-                                                                <h2 class="modal-title text-white" id="exampleModalLongTitle">Staff Details</h2>
+                                                                <h2 class="modal-title" id="exampleModalLabel">Staff Details</h2>
                                                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                                     <span aria-hidden="true">&times;</span>
                                                                 </button>
@@ -84,7 +82,6 @@
                                                                 <span class="text-info">Nationality: </span>&emsp;{{ stf.nationality }}<br>
                                                                 <span class="text-info">Citizenship Number: </span>&emsp;{{ stf.citizenship_number }}<br>
                                                                 <span class="text-info">Bio: </span>&emsp;{{ stf.bio }}<br>
-                                                                <span class="text-info">Status: </span>&emsp;{{ stf.status }}<br>
                                                                 <span class="text-info">is active: </span>&emsp;{{ stf.user.is_active }}<br>
                                                                 <span class="text-info">is staff: </span>&emsp;{{ stf.user.is_staff }}<br>
                                                                 <span class="text-info">is superuser: </span>&emsp;{{ stf.user.is_superuser }}<br>
@@ -122,6 +119,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
+                                            {% endif %}
                                             </tr>
                                         {% endfor %}
                                     {% else %}

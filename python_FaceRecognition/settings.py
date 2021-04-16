@@ -87,7 +87,7 @@ WSGI_APPLICATION = 'python_FaceRecognition.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'hfrs_d',
+        'NAME': 'facerecognition',
         'USER': 'reaper',
         'PASSWORD': 'facerecognition',
         'HOST': 'localhost',

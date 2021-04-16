@@ -19,6 +19,7 @@
     <link href="{% static 'assets/fontawesome/css/all.css' %}" rel="stylesheet">
     <link href="{% static 'assets/css/nucleo-icons.css' %}" rel="stylesheet" />
     <link href="{% static 'assets/css/mycss.css' %}" rel="stylesheet" />
+    <link href="{% static 'assets/css/sidebar.css' %}" rel="stylesheet" />
     {#    <link href="{% static 'assets/css/bootstrap.min.css' %}" rel="stylesheet" />#}
     <link href="{% static 'assets/css/cropper.min.css' %}" rel="stylesheet" />
 
@@ -26,27 +27,22 @@
 
 </head>
 
-<body class="">
-<div class="wrapper">
-    {% include 'includes/sidebar.html' %}
-    <div class="main-panel">
-        {% block navbar %}
-            {% include 'includes/navigation.html' %}
-        {% endblock %}
-        <div class="content">
+<body>
+<div class="page-wrapper chiller-theme toggled">
+    <main class="page-content">
+        <div class="container-fluid">
+            {% include 'includes/new_sidebar.html' %}
             {% if messages %}
                 {% for message in messages %}
                     <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}" role="alert">{{ message }}</div>
                 {% endfor %}
             {% endif %}
             {% block content %}{% endblock content %}
+            {% include 'includes/footer.html' %}
         </div>
-        {% include 'includes/footer.html' %}
-    </div>
+    </main>
 </div>
 {% include 'includes/scripts.html' %}
-{% include 'includes/scripts-sidebar.html' %}
-
 {% block javascripts %}{% endblock javascripts %}
 
 </body>

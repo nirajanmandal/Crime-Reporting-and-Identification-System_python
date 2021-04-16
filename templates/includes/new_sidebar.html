@@ -1,0 +1,149 @@
+{% load static %}
+{% if user.is_authenticated %}
+    <div class="page-wrapper chiller-theme toggled">
+        <a id="show-sidebar" class="btn btn-sm btn-dark" href="#">
+            <i class="fas fa-bars"></i>
+        </a>
+        <nav id="sidebar" class="sidebar-wrapper">
+            <div class="sidebar-content">
+                <div class="sidebar-brand">
+                    <a href="{% url 'accounts:dashboard' %}">Home</a>
+                    <div id="close-sidebar">
+                        <i class="fas fa-times"></i>
+                    </div>
+                </div>
+                <div class="sidebar-header">
+                    <div class="user-pic">
+                        {% if request.user.profile.profile_image %}
+                            <img class="img-responsive img-rounded" src="{{ request.user.profile.profile_image.url }}"
+                                 alt="Profile Photo">
+                        {% else %}
+                            <img class="img-responsive img-rounded" src="{% static 'assets/img/default-avatar.png' %}"
+                                 alt="Profile Photo">
+                        {% endif %}
+                    </div>
+                    <div class="user-info">
+                        <span class="user-name"> <strong>{{ request.user.first_name }}</strong>
+                            <strong>{{ request.user.last_name }}</strong>
+                        </span>
+                        {% if user.is_staff and user.is_superuser%}
+                            <span class="user-role">Admin</span>
+                        {% elif user.is_staff %}
+                            <span class="user-role">Staff</span>
+                        {% else %}
+                            <span class="user-role">User</span>
+                        {% endif %}
+                    </div>
+                </div>
+                <!-- sidebar-header  -->
+                <div class="sidebar-search">
+                    <div>
+                        <div class="input-group">
+                            <input type="text" class="form-control search-menu" placeholder="Search...">
+                            <div class="input-group-append">
+                                <span class="input-group-text">
+                                    <i class="fa fa-search" aria-hidden="true"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- sidebar-search  -->
+                <div class="sidebar-menu">
+                    <ul>
+                        <li class="header-menu">
+                            <span>General</span>
+                        </li>
+                        {% if user.is_staff and user.is_active %}
+                            <li class="sidebar-dropdown">
+                                <a href="#">
+                                    <i class="tim-icons icon-single-02"></i>
+                                    <span>Staff</span>
+                                </a>
+                                <div class="sidebar-submenu">
+                                    <ul>
+                                        {% if user.is_superuser %}
+                                            <li>
+                                                <a href="{% url 'accounts:register' %}">Add Staff
+                                                </a>
+                                            </li>
+                                        {% endif %}
+                                        <li>
+                                            <a href="{% url 'accounts:view-staff' %}">View Staff</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+
+                            <li class="sidebar-dropdown">
+                                <a href="#">
+                                    <i class="fa fa-users"></i>
+                                    <span>Citizens</span>
+                                </a>
+                                <div class="sidebar-submenu">
+                                    <ul>
+                                        <li>
+                                            <a href="{% url 'detection:add-citizen' %}">Add Citizen
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="{% url 'detection:view-citizen' %}">View Citizen</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+                        {% endif %}
+
+                        <li class="sidebar-dropdown">
+                            <a href="#">
+                                <i class="fas fa-file-alt "></i>
+                                <span>Case</span>
+                            </a>
+                            <div class="sidebar-submenu">
+                                <ul>
+                                    <li>
+                                        <a href="{% url 'cases:add-case' %}">Add Case</a>
+                                    </li>
+                                    <li>
+                                        <a href="{% url 'cases:list-case' %}">View Case</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+
+                        <li class="header-menu">
+                            <span>Track</span>
+                        </li>
+                        <li>
+                            <a href="{% url 'detection:spotted-citizen' %}">
+                                <i class="tim-icons icon-square-pin"></i>
+                                <span>Track</span>
+                            </a>
+                        </li>
+
+                        <li class="header-menu">
+                            <span>Profile</span>
+                        </li>
+                        <li class="sidebar-dropdown">
+                            <a href="#">
+                                <i class="fas fa-user-circle "></i>
+                                <span>Profile</span>
+                            </a>
+                            <div class="sidebar-submenu">
+                                <ul>
+                                    <li>
+                                        <a href="{% url 'accounts:profile' request.user.profile.id  %}">Profile</a>
+                                    </li>
+                                    <li>
+                                        <a href="{% url 'accounts:logout' %}">Logout</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <!-- sidebar-menu  -->
+            </div>
+        </nav>
+    </div>
+{% endif %}

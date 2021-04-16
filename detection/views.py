@@ -167,9 +167,9 @@ def detect_image(request):
         filename = fs.save(myfile.name, myfile)
         uploaded_file_url = fs.url(filename)
 
-        img_upload = FileSystemStorage(location='media/uploads')
-        img_save = img_upload.save(myfile.name, myfile)
-        img_file_url = img_upload.url(img_save)
+        # img_upload = FileSystemStorage(location='media/uploads')
+        # img_save = img_upload.save(myfile.name, myfile)
+        # img_file_url = img_upload.url(img_save)
 
     images = []
     encodings = []
@@ -177,7 +177,7 @@ def detect_image(request):
     files = []
     citizenship_number = []
 
-    cases = CasesModel.objects.all()
+    cases = CitizenProfile.objects.all()
     for crime in cases:
         images.append(crime.first_name + '_image')
         encodings.append(crime.first_name + '_face_encoding')

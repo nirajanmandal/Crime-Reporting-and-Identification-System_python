@@ -67,7 +67,7 @@ class UserProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ['profile_image', 'citizenship_number', 'nationality', 'address',
-                  'bio', 'birth_date', 'gender', 'phone_number', 'status',
+                  'bio', 'birth_date', 'gender', 'phone_number',
                   'x', 'y', 'width', 'height']
 
         widgets = {'address': forms.TextInput(attrs={'class': 'form-control'}),

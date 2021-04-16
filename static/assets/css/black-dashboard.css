@@ -5891,9 +5891,7 @@ a.badge-darker.focus {
 }
 
 .alert-danger {
-  color: #fd5d93;
-  background-color: #fd77a4;
-  border-color: #fd77a4;
+  color: red;
 }
 
 .alert-danger hr {
@@ -12681,7 +12679,7 @@ a.text-darker:focus {
 
 .alert {
   border: 0;
-  color: #ffffff;
+  color: red;
 }
 
 .alert .alert-link {
@@ -17346,7 +17344,6 @@ table.tablesorter thead tr .headerSortDown {
   background: -o-linear-gradient(0deg, #ba54f5 0%, #e14eca 100%);
   background: -moz-linear-gradient(0deg, #ba54f5 0%, #e14eca 100%);
   background: linear-gradient(0deg, #ba54f5 0%, #e14eca 100%);
-  height: calc(60vh - 40px);
   width: 230px;
   position: fixed;
   top: 0;
@@ -17366,7 +17363,6 @@ table.tablesorter thead tr .headerSortDown {
 .off-canvas-sidebar .sidebar-wrapper {
   width: 100%;
   min-height: 100%;
-  max-height: calc(100vh - 705px);
   z-index: 4;
   position: relative;
   overflow: auto;
@@ -17830,7 +17826,7 @@ table.tablesorter thead tr .headerSortDown {
 }
 
 .main-panel>.content {
-  padding: 78px 30px 30px 280px;
+  padding: 1px 30px 30px 280px;
   min-height: calc(100vh - 70px);
 }
 

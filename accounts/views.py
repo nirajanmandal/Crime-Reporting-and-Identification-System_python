@@ -46,9 +46,13 @@ class RegisterUserView(CreateView):
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)
         profile_form = self.second_form_class(request.POST, request.FILES)
+        print(form)
+        print(profile_form)
         # import ipdb
         # ipdb.set_trace()
         if form.is_valid() and profile_form.is_valid():
+            print(form)
+            print(profile_form)
             with transaction.atomic():
                 user = form.save()
                 user.is_active = False
@@ -124,7 +128,7 @@ class UserLoginView(FormView):
                     messages.error(request, 'account not activated')
                     return HttpResponseRedirect(request.path_info)
 
-            messages.error(request, 'invalid username or password')
+            messages.warning(request, 'invalid username or password')
             return HttpResponseRedirect(request.path_info)
 
 

@@ -9,12 +9,12 @@ GENDER_CHOICES = (
     ('Other', 'Other'),
 )
 
-STATUS_CHOICES = (
-    ('Free', 'Free'),
-    ('Wanted', 'Wanted'),
-    ('Missing', 'Missing'),
-    ('Found', 'Found'),
-)
+# STATUS_CHOICES = (
+#     ('Free', 'Free'),
+#     ('Wanted', 'Wanted'),
+#     ('Missing', 'Missing'),
+#     ('Found', 'Found'),
+# )
 
 
 class Profile(models.Model):
@@ -27,7 +27,7 @@ class Profile(models.Model):
     bio = models.TextField(max_length=500, null=False, blank=False)
     birth_date = models.DateField(null=False, blank=False)
     gender = models.CharField(max_length=10, choices=GENDER_CHOICES, null=False, blank=False)
-    status = models.CharField(max_length=30, choices=STATUS_CHOICES, null=False, blank=False)
+    # status = models.CharField(max_length=30, choices=STATUS_CHOICES, null=False, blank=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
