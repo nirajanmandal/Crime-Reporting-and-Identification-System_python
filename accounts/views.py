@@ -46,13 +46,9 @@ class RegisterUserView(CreateView):
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)
         profile_form = self.second_form_class(request.POST, request.FILES)
-        print(form)
-        print(profile_form)
         # import ipdb
         # ipdb.set_trace()
         if form.is_valid() and profile_form.is_valid():
-            print(form)
-            print(profile_form)
             with transaction.atomic():
                 user = form.save()
                 user.is_active = False
@@ -185,7 +181,7 @@ class ProfileEditView(SuccessMessageMixin, UpdateView):
     form_class = UserUpdateForm
     second_form_class = UserProfileForm
     template_name = 'accounts/profile.html'
-    success_url = reverse_lazy('accounts:view-staff')
+    success_url = reverse_lazy('accounts:dashboard')
     success_message = 'Profile was successfully updated'
 
     def post(self, request, *args, **kwargs):
@@ -205,8 +201,8 @@ class ProfileEditView(SuccessMessageMixin, UpdateView):
                 profile.save()
 
                 # messages.success(request, 'Profile was successfully updated')
-                return redirect('accounts:view-staff')
-        print(profile_form)
+                return redirect('accounts:dashboard')
+        print(profile_form.errors)
         messages.warning(request, 'Please check your credentials')
         return HttpResponseRedirect(request.path_info)
 

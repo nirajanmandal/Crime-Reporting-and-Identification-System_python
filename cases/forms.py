@@ -19,6 +19,7 @@ class CaseForm(forms.ModelForm):
                    'address': forms.TextInput(attrs={'class': 'form-control'}),
                    'contact_email': forms.EmailInput(attrs={'class': 'form-control'}),
                    'contact_number': forms.NumberInput(attrs={'class': 'form-control'}),
+                   'nationality': forms.TextInput(attrs={'class': 'form-control'}),
                    'date_of_case': forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'date'}),
                    # 'date_of_crime': DateTimePicker(options={'useCurrent': True, 'collapse': False},
                    #                                 attrs={'append': 'fa fa-calendar', 'icon_toggle': True}),

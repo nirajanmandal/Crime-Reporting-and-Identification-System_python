@@ -71,7 +71,7 @@ class UserProfileForm(forms.ModelForm):
                   'x', 'y', 'width', 'height']
 
         widgets = {'address': forms.TextInput(attrs={'class': 'form-control'}),
-                   # 'profile_image': forms.FileInput(attrs={'accept': 'image/*'}),
+                   # 'profile_image': forms.FileInput(attrs={'accept': 'image/*', 'required': 'false'}),
                    'phone_number': forms.NumberInput(attrs={'class': 'form-control'}),
                    'citizenship_number': forms.NumberInput(attrs={'class': 'form-control'}),
                    'nationality': forms.TextInput(attrs={'class': 'form-control'}),

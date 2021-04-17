@@ -19,6 +19,7 @@ class CasesModel(models.Model):
     first_name = models.CharField(max_length=50, blank=True, null=True)
     last_name = models.CharField(max_length=50, blank=True, null=True)
     address = models.CharField(max_length=100, blank=True, null=True)
+    nationality = models.CharField(max_length=50, blank=False, null=True,)
     contact_email = models.EmailField(max_length=100, blank=True, null=True)
     date_of_case = models.DateTimeField(blank=True, null=True)
     contact_number = models.IntegerField(blank=True, null=True)

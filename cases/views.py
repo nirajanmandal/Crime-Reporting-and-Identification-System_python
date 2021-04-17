@@ -1,6 +1,7 @@
+from django.db import transaction
 from django.shortcuts import render
 from django.contrib import messages
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 
@@ -90,6 +91,23 @@ class UpdateCaseView(UpdateView):
     form_class = CaseForm
     template_name = 'cases/update_cases.html'
     success_url = reverse_lazy('cases:list-case')
+    context_object_name = 'case'
+
+    def post(self, request, *args, **kwargs):
+        try:
+            case = self.get_object()
+        except CasesModel.DoesNotExist:
+            case = None
+        case_form = CaseForm(self.request.POST or None, self.request.FILES or None, instance=case)
+
+        if case_form.is_valid():
+            with transaction.atomic():
+                cas = case_form.save(commit=False)
+                cas.save()
+                messages.success(request, 'Profile was successfully updated')
+                return redirect('accounts:dashboard')
+        print(case_form.errors)
+        messages.warning(request, 'Please check your credentials')
 
 
 

@@ -115,12 +115,12 @@ def citizen_location(request, pk):
 @login_required
 def found_citizen(request, pk):
     free = SpottedCitizen.objects.filter(pk=pk)
-    freecitizen = SpottedCitizen.objects.filter(citizenship_number=free.get().citizenship_number).update(status='Found')
+    freecitizen = SpottedCitizen.objects.filter(id=free.get().id).update(status='Found')
     if freecitizen:
         citizen = SpottedCitizen.objects.filter(pk=pk)
-        free = CitizenProfile.objects.filter(citizenship_number=citizen.get().citizenship_number).update(status='Found')
+        free = CasesModel.objects.filter(id=citizen.get().id).update(status='Found')
         if free:
-            messages.add_message(request, messages.INFO, "Citizen updated to found, congratulations")
+            messages.success(request, messages.INFO, "Citizen updated to found, congratulations")
         else:
             messages.error(request, "Failed to update citizen status")
     return redirect('detection:spotted-citizen')
@@ -154,12 +154,6 @@ def csv_database_write(request, pk):
 @login_required
 # @method_decorator(login_required, name='dispatch')
 def detect_image(request):
-    # This is an example of running face recognition on a single image
-    # and drawing a box around each person that was identified.
-
-    # Load a sample picture and learn how to recognize it.
-
-    # upload image
     if request.method == 'POST' and request.FILES['image']:
         myfile = request.FILES['image']
         # fs = FileSystemStorage(base_url='media/uploads')
@@ -175,16 +169,16 @@ def detect_image(request):
     encodings = []
     names = []
     files = []
-    citizenship_number = []
+    case_id = []
+    # citizenship_number = []
 
-    cases = CitizenProfile.objects.all()
+    cases = CasesModel.objects.all()
     for crime in cases:
         images.append(crime.first_name + '_image')
         encodings.append(crime.first_name + '_face_encoding')
-        files.append(crime.citizen_image)
+        files.append(crime.image)
         names.append(crime.first_name + ' ' + crime.last_name)
-        citizenship_number.append(crime.citizenship_number)
-
+        case_id.append(crime.id)
 
     # citizen = CitizenProfile.objects.all()
     # for crime in citizen:
@@ -206,7 +200,8 @@ def detect_image(request):
     # Create arrays of known face encodings and their names
     known_face_encodings = encodings
     known_face_names = names
-    c_id = citizenship_number
+    c_id = case_id
+    # c_id = citizenship_number
 
     # import pdb
     # pdb.set_trace()
@@ -239,8 +234,8 @@ def detect_image(request):
         face_distances = face_recognition.face_distance(known_face_encodings, face_encoding)
         best_match_index = np.argmin(face_distances)
         if matches[best_match_index]:
-            ctzn_id = c_id[best_match_index]
-            person = CitizenProfile.objects.filter(citizenship_number=ctzn_id)
+            ca_id = c_id[best_match_index]
+            person = CasesModel.objects.filter(id=ca_id)
             name = known_face_names[best_match_index] + ', status: ' + person.get().status
             print('found')
 
@@ -248,13 +243,11 @@ def detect_image(request):
                 wanted_citizen = SpottedCitizen.objects.create(
                     first_name=person.get().first_name,
                     last_name=person.get().last_name,
-                    birth_date=person.get().birth_date,
                     address=person.get().address,
-                    phone_number=person.get().phone_number,
+                    contact_number=person.get().contact_number,
                     nationality=person.get().nationality,
-                    citizenship_number=person.get().citizenship_number,
-                    citizen_image=person.get().citizen_image,
-                    bio=person.get().bio,
+                    image=person.get().image,
+                    description=person.get().description,
                     gender=person.get().gender,
                     status='Wanted',
                     latitude=0,
@@ -265,13 +258,11 @@ def detect_image(request):
                 missing_citizen = SpottedCitizen.objects.create(
                     first_name=person.get().first_name,
                     last_name=person.get().last_name,
-                    birth_date=person.get().birth_date,
                     address=person.get().address,
-                    phone_number=person.get().phone_number,
+                    contact_number=person.get().contact_number,
                     nationality=person.get().nationality,
-                    citizenship_number=person.get().citizenship_number,
-                    citizen_image=person.get().citizen_image,
-                    bio=person.get().bio,
+                    image=person.get().image,
+                    description=person.get().description,
                     gender=person.get().gender,
                     status='Missing',
                     latitude=0,
@@ -314,15 +305,24 @@ def detect_with_webcam(request):
     encodings = []
     names = []
     files = []
-    citizenship_number = []
+    case_id = []
+    # citizenship_number = []
 
-    citizen = CitizenProfile.objects.all()
-    for crime in citizen:
+    cases = CasesModel.objects.all()
+    for crime in cases:
         images.append(crime.first_name + '_image')
         encodings.append(crime.first_name + '_face_encoding')
-        files.append(crime.citizen_image)
-        names.append(crime.first_name + crime.last_name)
-        citizenship_number.append(crime.citizenship_number)
+        files.append(crime.image)
+        names.append(crime.first_name + ' ' + crime.last_name)
+        case_id.append(crime.id)
+
+    # citizen = CitizenProfile.objects.all()
+    # for crime in citizen:
+    #     images.append(crime.first_name + '_image')
+    #     encodings.append(crime.first_name + '_face_encoding')
+    #     files.append(crime.citizen_image)
+    #     names.append(crime.first_name + crime.last_name)
+    #     citizenship_number.append(crime.citizenship_number)
 
     for i in range(0, len(images)):
         images[i] = face_recognition.load_image_file(files[i])
@@ -331,7 +331,7 @@ def detect_with_webcam(request):
     # Create arrays of known face encodings and their names
     known_face_encodings = encodings
     known_face_names = names
-    c_id = citizenship_number
+    c_id = case_id
 
     while True:
         # Grab a single frame of video
@@ -362,8 +362,8 @@ def detect_with_webcam(request):
             face_distances = face_recognition.face_distance(known_face_encodings, face_encoding)
             best_match_index = np.argmin(face_distances)
             if matches[best_match_index]:
-                ctzn_id = c_id[best_match_index]
-                person = CitizenProfile.objects.filter(citizenship_number=ctzn_id)
+                ca_id = c_id[best_match_index]
+                person = CasesModel.objects.filter(id=ca_id)
                 name = known_face_names[best_match_index] + ', status: ' + person.get().status
 
                 if person.get().status == 'Wanted':
