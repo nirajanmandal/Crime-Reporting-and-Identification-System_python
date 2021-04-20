@@ -22,5 +22,6 @@ urlpatterns = [
     path('', include('detection.urls')),
     path('', include('cases.urls')),
     path('', include('news.urls')),
+    path('', include('searching.urls')),
 
 ]

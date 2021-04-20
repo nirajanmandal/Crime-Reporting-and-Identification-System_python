@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
+from django.db.models import Q
 private_storage = FileSystemStorage(location=settings.PRIVATE_STORAGE_ROOT)
 
 
@@ -16,6 +17,24 @@ STATUS_CHOICES = (
     ('Missing', 'Missing'),
     ('Found', 'Found'),
 )
+
+
+class CitizenProfileQueryset(models.QuerySet):
+    def search(self, query=None):
+        qs = self
+        if query is not None:
+            or_lookup = (Q(first_name__icontains=query) | Q(last_name__icontains=query) | Q(
+                status__iexact=query) | Q(gender__iexact=query))
+            qs = qs.filter(or_lookup).distinct()
+        return qs
+
+
+class CitizenProfileManager(models.Manager):
+    def get_queryset(self):
+        return CitizenProfileQueryset(self.model, using=self._db)
+
+    def search(self, query=None):
+        return self.get_queryset().search(query=query)
 
 
 class CitizenProfile(models.Model):
@@ -38,6 +57,8 @@ class CitizenProfile(models.Model):
 
     def __str__(self):
         return self.first_name + ' ' + self.last_name
+
+    objects = CitizenProfileManager()
 
 
 class SpottedCitizen(models.Model):

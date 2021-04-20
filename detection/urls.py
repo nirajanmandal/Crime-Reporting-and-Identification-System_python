@@ -6,6 +6,7 @@ from .views import *
 app_name = 'detection'
 urlpatterns = [
     path('detectimage/', detect_image, name='detect-image'),
+    path('detectwithvideo/', detect_video, name='detect-video'),
     path('detectwithwebcam/', detect_with_webcam, name='detect-webcam'),
     path('adduser/', add_staff, name='add-user'),
     path('addcitizen/', AddCitizen.as_view(), name='add-citizen'),

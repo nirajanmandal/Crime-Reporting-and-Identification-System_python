@@ -1,8 +1,7 @@
-from django import forms
 from django.contrib.messages.views import SuccessMessageMixin
 from django.db import transaction
 from django.shortcuts import render, redirect, HttpResponseRedirect
-from django.views.generic import View, CreateView, TemplateView, UpdateView, FormView, DetailView, ListView
+from django.views.generic import View, CreateView, TemplateView, UpdateView, FormView, ListView
 from django.contrib.auth.views import LogoutView, PasswordChangeView, PasswordChangeDoneView
 from django.urls import reverse_lazy
 from django.contrib.auth.decorators import login_required
@@ -11,13 +10,11 @@ from django.contrib import messages
 from django.utils.decorators import method_decorator
 from accounts.forms import UserForm, UserProfileForm, LoginUser, UserPasswordChangeForm, UserUpdateForm
 from accounts.models import *
-from PIL import Image
 
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.template.loader import render_to_string
-
 from detection.models import CitizenProfile
 from .tokens import account_activation_token
 
@@ -264,8 +261,3 @@ class StaffUpdateView(SuccessMessageMixin, UpdateView):
         context['user_form'] = user_form
         context['profile'] = profile
         return context
-
-
-
-
-

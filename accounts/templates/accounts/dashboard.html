@@ -2,9 +2,6 @@
 {% load static %}
 {% block title %} Dashboard {% endblock %}
 
-<!-- Specific Page CSS goes HERE  -->
-{% block stylesheets %}{% endblock stylesheets %}
-
 {% block content %}
     <div class="row">
         <div class="col-lg-4 col-md-6 mt-5">
@@ -20,14 +17,12 @@
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h5 class="modal-title">Upload Citizen Picture</h5>
-
                                 </div>
                                 <form method="post" action="{% url 'detection:detect-image' %}" enctype="multipart/form-data">
                                     {% csrf_token %}
                                     <div class="modal-body">
-                                        <input type="file" name="image" required>
+                                        <input id="inpFile" type="file" name="image"  required>
                                     </div>
-
                                     <div class="modal-footer">
                                         <a  type="button" class="btn btn-dark" data-dismiss="modal">Close</a>
                                         <button type="submit" class="btn btn-dark">Process</button>
@@ -44,18 +39,17 @@
                 <i class="fas fa-camera fa-10x"></i>
                 <div class="card-body">
                     <h5 class="title">Upload Citizen Video</h5>
-                    <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#exampleModalLong">Upload Video</button>
-                    <div class="modal fade" id="exampleModalLong">
+                    <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#uploadVideo">Upload Video</button>
+                    <div class="modal fade" id="uploadVideo">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h5 class="modal-title">Upload Citizen Video</h5>
-
                                 </div>
-                                <form method="post" action="" enctype="multipart/form-data">
+                                <form method="post" action="{% url 'detection:detect-video' %}" enctype="multipart/form-data">
                                     {% csrf_token %}
                                     <div class="modal-body">
-                                        <input type="file" name="image" required>
+                                        <input type="file" name="video" required>
                                     </div>
 
                                     <div class="modal-footer">
@@ -69,7 +63,6 @@
                 </div>
             </div>
         </div>
-
 
         <div class="col-lg-4 col-md-6 mt-5">
             <div class="card card-bordered text-center">
@@ -101,8 +94,7 @@
 {#        </div>#}
 {#    </div>#}
 
-
-    <center><h2 class="mt-5">View Notices</h2></center>
+    <h2 class="mt-5">View Notices</h2>
 {#    <div class="row ">#}
 {#        <div class="offset-lg-2 col-lg-8 col-md-6 mt-5">#}
 {#            <div class="card">#}
@@ -195,11 +187,7 @@
                             </a>
                         </div>
                     </div>
-
                 </div>
-                {#                <div class="card-footer w-100 text-muted">#}
-                {#                    Footer notes#}
-                {#                </div>#}
             </div>
         </div>
 
@@ -219,11 +207,7 @@
                             </a>
                         </div>
                     </div>
-
                 </div>
-                {#                <div class="card-footer w-100 text-muted">#}
-                {#                    Footer notes#}
-                {#                </div>#}
             </div>
         </div>
 
@@ -243,31 +227,12 @@
                             </a>
                         </div>
                     </div>
-
                 </div>
-                {#                <div class="card-footer w-100 text-muted">#}
-                {#                    Footer notes#}
-                {#                </div>#}
             </div>
         </div>
 
     </div>
-
-
-
 {% endblock content %}
 
-<!-- Specific Page JS goes HERE  -->
-{% block javascripts %}
-
-    <script>
-        $(document).ready(function() {
-            // Javascript method's body can be found in assets/js/demos.js
-            demo.initDashboardPageCharts();
-
-        });
-    </script>
-
-{% endblock javascripts %}
 
 

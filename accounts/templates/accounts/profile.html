@@ -191,6 +191,7 @@
                         <img class="avatar" src="{{ request.user.profile.profile_image.url }}" alt="...">
                         <h5 class="title">{{ request.user.username }}</h5>
                         <p class="description">{{ request.user.email }}</p>
+                        <a href="{% url 'accounts:password_change' %}"> Change password </a>
                     </div>
                     {#                <div class="card-description">#}
                     {#                    {{ request.user.profile.bio }}#}

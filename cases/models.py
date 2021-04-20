@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Q
 from django.urls import reverse
 
 GENDER_CHOICES = (
@@ -13,6 +14,24 @@ STATUS_CHOICES = (
     ('Missing', 'Missing'),
     ('Found', 'Found'),
 )
+
+
+class CaseQueryset(models.QuerySet):
+    def search(self, query=None):
+        qs = self
+        if query is not None:
+            or_lookup = (Q(first_name__icontains=query) | Q(last_name__icontains=query) | Q(address__iexact=query)
+                         | Q(status__iexact=query) | Q(gender__iexact=query))
+            qs = qs.filter(or_lookup).distinct()
+        return qs
+
+
+class CaseManager(models.Manager):
+    def get_queryset(self):
+        return CaseQueryset(self.model, using=self._db)
+
+    def search(self, query=None):
+        return self.get_queryset().search(query=query)
 
 
 class CasesModel(models.Model):
@@ -35,6 +54,8 @@ class CasesModel(models.Model):
 
     def __str__(self):
         return self.first_name + ' ' + self.last_name
+
+    objects = CaseManager()
 
 
 # class Comment(models.Model):

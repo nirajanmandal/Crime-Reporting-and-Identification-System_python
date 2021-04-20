@@ -286,13 +286,153 @@ def detect_image(request):
 
         # Display the resulting image
         pil_image.show()
-        return redirect('accounts:dashboard')
+        return redirect('cases:wanted-list')
 
         # You can also save a copy of the new image to disk if you want by uncommenting this line
         # pil_image.save("image_with_boxes.jpg")
 
     else:
         print('try again')
+
+
+@login_required
+def detect_video(request):
+    # upload image
+    myfile = []
+
+    if request.method == 'POST' and request.FILES['video']:
+        myfile = request.FILES['video']
+        print("video poseted")
+        fs = FileSystemStorage()
+        filename = fs.save(myfile.name, myfile)
+        uploaded_file_url = fs.url(filename)
+
+        # Create an output movie file (make sure resolution/frame rate matches input video!)
+        fourcc = cv2.VideoWriter_fourcc(*'XVID')
+        output_movie = cv2.VideoWriter('output.avi', fourcc, 29.97, (640, 360))
+
+    images = []
+    encodings = []
+    names = []
+    files = []
+    case_id = []
+    frame_number = 0
+
+    citizen = CasesModel.objects.all()
+    for crime in citizen:
+        images.append(crime.first_name + '_video')
+        encodings.append(crime.first_name + '_face_encoding')
+        files.append(crime.image)
+        names.append(crime.first_name + crime.last_name)
+        case_id.append(crime.id)
+
+    for i in range(0, len(images)):
+        images[i] = face_recognition.load_image_file(files[i])
+        encodings[i] = face_recognition.face_encodings(images[i])[0]
+
+    # Create arrays of known face encodings and their names
+    known_face_encodings = encodings
+    known_face_names = names
+    c_id = case_id
+
+    unknown_image = cv2.VideoCapture(uploaded_file_url[1:])
+
+    while True:
+        # Grab a single frame of video
+        ret, frame = unknown_image.read()
+        frame_number += 1
+
+        # Quit when the input video file ends
+        if not ret:
+            break
+
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
+
+        # Convert the image from BGR color (which OpenCV uses) to RGB color (which face_recognition uses)
+        rgb_frame = frame[:, :, ::-1]
+
+        # Find all the faces and face encodings in the current frame of video
+        face_locations = face_recognition.face_locations(rgb_frame)
+        face_encodings = face_recognition.face_encodings(rgb_frame, face_locations)
+
+        face_names = []
+        for (top, right, bottom, left), face_encoding in zip(face_locations, face_encodings):
+            # See if the face is a match for the known face(s)
+            matches = face_recognition.compare_faces(known_face_encodings, face_encoding)
+
+            # If you had more than 2 faces, you could make this logic a lot prettier
+            # but I kept it simple for the demo
+
+            name = "Unknown"
+
+            # # If a match was found in known_face_encodings, just use the first one.
+            # if True in matches:
+            #     first_match_index = matches.index(True)
+            #     name = known_face_names[first_match_index]
+
+            face_distances = face_recognition.face_distance(known_face_encodings, face_encoding)
+            best_match_index = np.argmin(face_distances)
+
+            if matches[best_match_index]:
+                print("match")
+                ca_id = c_id[best_match_index]
+                person = CasesModel.objects.filter(id=ca_id)
+                name = known_face_names[best_match_index] + ', status: ' + person.get().status
+
+                if person.get().status == 'Wanted':
+                    wanted_citizen = SpottedCitizen.objects.create(
+                        first_name=person.get().first_name,
+                        last_name=person.get().last_name,
+                        address=person.get().address,
+                        contact_number=person.get().contact_number,
+                        nationality=person.get().nationality,
+                        image=person.get().image,
+                        description=person.get().description,
+                        gender=person.get().gender,
+                        status='Wanted',
+                        latitude=0,
+                        longitude=0
+                    )
+                    wanted_citizen.save()
+                elif person.get().status == 'Missing':
+                    missing_citizen = SpottedCitizen.objects.create(
+                        first_name=person.get().first_name,
+                        last_name=person.get().last_name,
+                        address=person.get().address,
+                        contact_number=person.get().contact_number,
+                        nationality=person.get().nationality,
+                        image=person.get().image,
+                        description=person.get().description,
+                        gender=person.get().gender,
+                        status='Wanted',
+                        latitude=0,
+                        longitude=0
+                    )
+                    missing_citizen.save()
+                else:
+                    pass
+
+
+            # Draw a box around the face
+            cv2.rectangle(frame, (left, top), (right, bottom), (0, 0, 255), 2)
+
+            # Draw a label with a name below the face
+            cv2.rectangle(frame, (left, bottom - 25), (right, bottom), (0, 0, 255), cv2.FILLED)
+            font = cv2.FONT_HERSHEY_DUPLEX
+            cv2.putText(frame, name, (left + 6, bottom - 6), font, 0.5, (255, 255, 255), 1)
+
+            cv2.imshow('Video', frame)
+
+
+        # # Write the resulting image to the output video file
+        # print("Writing frame {} / {}".format(frame_number, length))
+        output_movie.write(frame)
+
+    # All done!
+    # myfile.release()
+    cv2.destroyAllWindows()
+    return redirect('accounts:dashboard')
 
 
 @login_required
@@ -370,13 +510,11 @@ def detect_with_webcam(request):
                     wanted_citizen = SpottedCitizen.objects.create(
                         first_name=person.get().first_name,
                         last_name=person.get().last_name,
-                        birth_date=person.get().birth_date,
                         address=person.get().address,
-                        phone_number=person.get().phone_number,
+                        contact_number=person.get().contact_number,
                         nationality=person.get().nationality,
-                        citizenship_number=person.get().citizenship_numbere,
-                        citizen_image=person.get().citizen_image,
-                        bio=person.get().bio,
+                        image=person.get().image,
+                        description=person.get().description,
                         gender=person.get().gender,
                         status='Wanted',
                         latitude='20202020',
@@ -387,13 +525,11 @@ def detect_with_webcam(request):
                     missing_citizen = SpottedCitizen.objects.create(
                         first_name=person.get().first_name,
                         last_name=person.get().last_name,
-                        birth_date=person.get().birth_date,
                         address=person.get().address,
-                        phone_number=person.get().phone_number,
+                        contact_number=person.get().contact_number,
                         nationality=person.get().nationality,
-                        citizenship_number=person.get().citizenship_number,
-                        citizen_image=person.get().citizen_image,
-                        bio=person.get().bio,
+                        image=person.get().image,
+                        description=person.get().description,
                         gender=person.get().gender,
                         status='Missing',
                         latitude='20202020',

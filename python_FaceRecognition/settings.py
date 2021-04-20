@@ -43,10 +43,7 @@ INSTALLED_APPS = [
     'news',
     'rest_framework',
     'cv2',
-    # 'widget_tweaks',
-    # 'crispy_forms',
-    # 'django_extensions',
-    # 'tempus_dominus'
+    'searching',
 ]
 
 MIDDLEWARE = [

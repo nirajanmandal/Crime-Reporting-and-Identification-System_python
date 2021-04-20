@@ -14,34 +14,25 @@
     </title>
 
     <link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,600,700,800" rel="stylesheet" />
-
-    <link href="{% static 'assets/css/black-dashboard.css' %}" rel="stylesheet" />
-    <link href="{% static 'assets/fontawesome/css/all.css' %}" rel="stylesheet">
-    <link href="{% static 'assets/css/nucleo-icons.css' %}" rel="stylesheet" />
-    <link href="{% static 'assets/css/mycss.css' %}" rel="stylesheet" />
-    <link href="{% static 'assets/css/sidebar.css' %}" rel="stylesheet" />
-    {#    <link href="{% static 'assets/css/bootstrap.min.css' %}" rel="stylesheet" />#}
-    <link href="{% static 'assets/css/cropper.min.css' %}" rel="stylesheet" />
-
+    {% include 'includes/css.html' %}
     {% block stylesheets %}{% endblock stylesheets %}
 
 </head>
 
-<body>
+<body onload="myFunction()">
+<div id="loading"></div>
 <div class="page-wrapper chiller-theme toggled">
     <main class="page-content">
         <div class="container-fluid">
             {% include 'includes/new_sidebar.html' %}
-            {% if messages %}
-                {% for message in messages %}
-                    <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}" role="alert">{{ message }}</div>
-                {% endfor %}
-            {% endif %}
-            {% block content %}{% endblock content %}
-            {% include 'includes/footer.html' %}
+            {% block content %}
+
+            {% endblock content %}
+
         </div>
     </main>
 </div>
+{% include 'includes/footer.html' %}
 {% include 'includes/scripts.html' %}
 {% block javascripts %}{% endblock javascripts %}
 
