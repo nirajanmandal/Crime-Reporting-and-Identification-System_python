@@ -9,6 +9,7 @@ urlpatterns = [
     path('', UserLoginView.as_view(), name='index'),
     path('login/', UserLoginView.as_view(), name='login'),
     path('home/', UserDashboardView.as_view(), name='dashboard'),
+    path('addstaff/', AddStaffView.as_view(), name='add-staff'),
     path('viewstaff/', ListStaffView.as_view(), name='view-staff'),
     path('updatestaff/<int:pk>/', StaffUpdateView.as_view(), name='update-staff'),
     path('deletestaff/<int:pk>/', delete_staff, name='delete-staff'),

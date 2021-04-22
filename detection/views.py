@@ -14,25 +14,8 @@ from django.utils.decorators import method_decorator
 from cases.models import CasesModel
 from .forms import CitizenForm
 from .models import CitizenProfile, SpottedCitizen
-from rest_framework.views import APIView
-from rest_framework.parsers import MultiPartParser, FormParser
-from rest_framework.response import Response
-from rest_framework import status
-from .serializers import FileSerializer
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
-
-
-class FileView(APIView):
-    parser_classes = (MultiPartParser, FormParser)
-
-    def post(self, request, *args, **kwargs):
-        file_serializer = FileSerializer(data=request.data)
-        if file_serializer.is_valid():
-            file_serializer.save()
-            return Response(file_serializer.data, status=status.HTTP_201_CREATED)
-        else:
-            return Response(file_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 @login_required
@@ -101,6 +84,7 @@ class SpottedCitizenView(ListView):
     model = SpottedCitizen
     template_name = 'detection/spotted_citizen.html'
     context_object_name = 'citizens'
+    paginate_by = 5
 
 
 @login_required
@@ -286,7 +270,7 @@ def detect_image(request):
 
         # Display the resulting image
         pil_image.show()
-        return redirect('cases:wanted-list')
+        return redirect('cases:list-case')
 
         # You can also save a copy of the new image to disk if you want by uncommenting this line
         # pil_image.save("image_with_boxes.jpg")

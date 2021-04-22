@@ -59,20 +59,7 @@ ul ul a {
     z-index: 99999;
 }
 
-.image-preview{
-    width: 300px;
-    min-height: 300px;
-    border: 2px solid #dddddd;
-    margin-top: 20px;
+#messages {
+    width: 67%;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-    color: #cccccc;
-}
-
-.image-preview__image{
-    display: none;
-    width: 100%;
 }

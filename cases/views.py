@@ -34,8 +34,16 @@ class AddCaseView(CreateView):
             messages.success(request, 'Case added successfully')
             return redirect('accounts:dashboard')
 
-        messages.error(request, 'Please check your credentials again')
+        # messages.error(request, 'Please check your credentials again')
         return render(request, self.template_name, {'form': form})
+
+
+@login_required
+def approve_view(request, pk):
+    approve = CasesModel.objects.get(pk=pk)
+    approve.is_approved = not approve.is_approved
+    approve.save()
+    return redirect('cases:list-case')
 
 
 @method_decorator(login_required, name='dispatch')

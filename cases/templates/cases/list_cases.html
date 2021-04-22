@@ -25,6 +25,7 @@
                                     <th>Gender</th>
                                     <th>Date of Case</th>
                                     <th>status</th>
+                                    <th>Approve</th>
                                     {% if user.is_staff and user.is_superuser %}
                                         <th>Edit</th>
                                         <th>Delete</th>
@@ -46,6 +47,44 @@
                                                 <td>{{ case.date_of_case }}</td>
                                             {% endif %}
                                             <td>{{ case.status }}</td>
+                                            <td>
+                                                <a href="#" {% if user.is_superuser or user.is_staff %} data-toggle="modal" data-target="#id_case_approve{{ case.pk }}" {% endif %}>
+                                                    {% if case.is_approved %}
+                                                        Approved
+                                                    {% else %}
+                                                        Pending
+                                                    {% endif %}
+                                                </a>
+                                            </td>
+
+
+
+                                            <div class="modal fade" id="id_case_approve{{ case.pk }}">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h2 class="modal-title text-white">Approve</h2>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <h4 class="text-dark">Are you sure you want to approve "{{ case.first_name }}"?</h4>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <a  type="button" href="{% url 'cases:approve-case' case.pk %}" class="btn btn-dark text-white">
+                                                                {% if case.is_approved %}
+                                                                    Change to pending
+                                                                {% else %}
+                                                                    Approve
+                                                                {% endif %}
+                                                            </a>
+                                                            <button class="btn btn-dark" data-dismiss="modal">Cancel</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+{#                                            <td>{{ case.status }}</td>#}
                                             {% if user.is_staff and user.is_superuser %}
                                                 <td>
                                                     <a href="{% url 'cases:edit-case' case.id %}">

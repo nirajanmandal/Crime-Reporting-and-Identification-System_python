@@ -23,6 +23,13 @@ from .tokens import account_activation_token
 class UserDashboardView(TemplateView):
     template_name = 'accounts/dashboard.html'
 
+    # def post(self, request, *args, **kwargs):
+    #     if request.user.is_staff and request.user.update_at:
+    #         messages.warning("Please change your password ")
+    #         return redirect('accounts:profile')
+    #     else:
+    #         return render(request, self.template_name)
+
 
 # @method_decorator(staff_member_required, name='dispatch')
 class RegisterUserView(CreateView):
@@ -67,6 +74,39 @@ class RegisterUserView(CreateView):
 
             messages.warning(request, 'Please Confirm your email to complete registration.')
             return redirect('accounts:login')
+        return render(request, self.template_name, {'form': form, 'profile_form': profile_form})
+
+
+class AddStaffView(CreateView):
+    template_name = 'accounts/add_staff.html'
+    form_class = UserForm
+    second_form_class = UserProfileForm
+    success_url = reverse_lazy('accounts:view-staff')
+
+    def get(self, request, *args, **kwargs):
+        form = self.form_class()
+        profile_form = self.second_form_class()
+        if request.user.is_superuser and request.user.is_authenticated:
+            return render(request, self.template_name, {'form': form, 'profile_form': profile_form})
+        else:
+            messages.warning(request, 'You must be admin to add staff')
+            return redirect('accounts:dashboard')
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
+        profile_form = self.second_form_class(request.POST, request.FILES)
+        if form.is_valid() and profile_form.is_valid():
+            with transaction.atomic():
+                user = form.save()
+                user.is_staff = True
+                user.save()
+
+                profile = profile_form.save(commit=False)
+                profile.user = user
+                profile.save()
+
+            messages.success(request, 'Staff added successfully.')
+            return redirect('accounts:view-staff')
         return render(request, self.template_name, {'form': form, 'profile_form': profile_form})
 
 
@@ -179,7 +219,7 @@ class ProfileEditView(SuccessMessageMixin, UpdateView):
     second_form_class = UserProfileForm
     template_name = 'accounts/profile.html'
     success_url = reverse_lazy('accounts:dashboard')
-    success_message = 'Profile was successfully updated'
+    # success_message = 'Profile was successfully updated'
 
     def post(self, request, *args, **kwargs):
         try:
@@ -197,7 +237,7 @@ class ProfileEditView(SuccessMessageMixin, UpdateView):
                 profile.user = user
                 profile.save()
 
-                # messages.success(request, 'Profile was successfully updated')
+                messages.success(request, 'Profile was successfully updated')
                 return redirect('accounts:dashboard')
         print(profile_form.errors)
         messages.warning(request, 'Please check your credentials')

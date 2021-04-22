@@ -18,7 +18,7 @@
                                 <div class="modal-header">
                                     <h5 class="modal-title">Upload Citizen Picture</h5>
                                 </div>
-                                <form method="post" action="{% url 'detection:detect-image' %}" enctype="multipart/form-data">
+                                <form method="post" id="id_image_detect" action="{% url 'detection:detect-image' %}" enctype="multipart/form-data">
                                     {% csrf_token %}
                                     <div class="modal-body">
                                         <input id="inpFile" type="file" name="image"  required>
@@ -233,6 +233,14 @@
 
     </div>
 {% endblock content %}
+{% block javascripts %}
+    <script>
+    $('#id_image_detect').submit(function(){
+        $("#id_image_detect").append("<h4 class='text-dark'>Processing...</h4>");
+    })
+    </script>
+{% endblock javascripts %}
+
 
 
 

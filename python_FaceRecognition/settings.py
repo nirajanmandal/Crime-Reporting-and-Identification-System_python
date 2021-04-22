@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'cv2',
     'searching',
+    'feedback',
 ]
 
 MIDDLEWARE = [

@@ -1,3 +1,5 @@
+import re
+
 from django import forms
 from PIL import Image
 from accounts.models import Profile
@@ -59,10 +61,10 @@ class UserUpdateForm(forms.ModelForm):
 
 
 class UserProfileForm(forms.ModelForm):
-    x = forms.FloatField(widget=forms.HiddenInput())
-    y = forms.FloatField(widget=forms.HiddenInput())
-    width = forms.FloatField(widget=forms.HiddenInput())
-    height = forms.FloatField(widget=forms.HiddenInput())
+    x = forms.FloatField(widget=forms.HiddenInput(), required=False)
+    y = forms.FloatField(widget=forms.HiddenInput(), required=False)
+    width = forms.FloatField(widget=forms.HiddenInput(), required=False)
+    height = forms.FloatField(widget=forms.HiddenInput(), required=False)
 
     class Meta:
         model = Profile
@@ -72,12 +74,21 @@ class UserProfileForm(forms.ModelForm):
 
         widgets = {'address': forms.TextInput(attrs={'class': 'form-control'}),
                    # 'profile_image': forms.FileInput(attrs={'accept': 'image/*', 'required': 'false'}),
-                   'phone_number': forms.NumberInput(attrs={'class': 'form-control'}),
+                   'phone_number': forms.TextInput(attrs={'class': 'form-control'}),
                    'citizenship_number': forms.NumberInput(attrs={'class': 'form-control'}),
                    'nationality': forms.TextInput(attrs={'class': 'form-control'}),
                    'bio': forms.Textarea(attrs={'class': 'form-control'}),
                    'birth_date': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
                    }
+
+    def clean_phone_number(self):
+        phone_number = self.cleaned_data.get('phone_number')
+        PHONE_NUMBER_REGEX = re.compile(r"^(([+]?\d{3})-?)?\d{7,10}$")
+        if not PHONE_NUMBER_REGEX.match(phone_number):
+            raise forms.ValidationError('''Phone Number format is not valid. Some examples of supported
+              phone numbers are numbers are 9811111111, 08256666,
+              977-9833333333, +977-9833333333, 977-08256666''')
+        return phone_number
 
     def save(self, commit=True):
         photo = super(UserProfileForm, self).save()
@@ -88,18 +99,11 @@ class UserProfileForm(forms.ModelForm):
         h = self.cleaned_data.get('height')
 
         image = Image.open(photo.profile_image)
-        cropped_image = image.crop((x, y, w + x, h + y))
-        resized_image = cropped_image.resize((200, 200), Image.ANTIALIAS)
-        resized_image.save(photo.profile_image.path)
+        if x and y and w and h:
+            cropped_image = image.crop((x, y, w + x, h + y))
+            resized_image = cropped_image.resize((200, 200), Image.ANTIALIAS)
+            resized_image.save(photo.profile_image.path)
         return photo
-
-    # def clean_phone_number(self):
-    #     ph_no = self.cleaned_data['phone_number']
-    #     p_number = [ph_no]
-    #     if len(ph_no) > 15:
-    #         raise forms.ValidationError('Must be less than 15 digit')
-    #         # self._errors['ph_no'] = self.error_class(['Must be less than 15 digit'])
-    #     return ph_no
 
 
 class LoginUser(forms.Form):

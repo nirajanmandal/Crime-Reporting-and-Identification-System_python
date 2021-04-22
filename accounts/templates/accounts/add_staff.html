@@ -68,7 +68,7 @@
         <div class="col-md-9">
             <div class="card">
                 <div class="card-header">
-                    <h5 class="title">Register</h5>
+                    <h5 class="title">Add Staff</h5>
                 </div>
                 <div class="card-body">
                     <form method="post" action="" enctype="multipart/form-data" id="formUpload">
@@ -79,7 +79,7 @@
                         {{ profile_form.width }}
                         {{ profile_form.height }}
 
-                        Add your credentials or <a href={% url 'accounts:login' %} >authenticate</a> with an existing account.
+                        Add staff credentials.
                         <div class="row">
                             <div class="col-md-6 pr-md-1">
                                 <div class="form-group">
@@ -197,26 +197,24 @@
                                 </div>
                             </div>
                             <span class="text-danger">{{ profile_form.profile_image.errors }}</span>
-                        </div><br>
+                        </div> <br>
 
                         <div class="col-md-6 pl-md-1">
                             <div class="form-group">
-                                <label>Describe yourself</label>
+                                <label>Description</label>
                                 {{ profile_form.bio }}
                             </div>
                         </div>
                         <span class="text-danger">{{ profile_form.bio.errors }}</span>
 
                         <div class="card-footer">
-                            <button type="submit" name="register" class="btn btn-fill btn-dark">Register</button>
+                            <button type="submit" name="register" class="btn btn-fill btn-dark">Add</button>
                             &nbsp; &nbsp;
-                            Have an account? <a href="{% url 'accounts:login' %}" class="text-primary">Login</a>
                         </div>
                         {{ form.non_field_errors }}
                         {{ profile_form.non_field_errors }}
                     </form>
                 </div>
-
             </div>
         </div>
     </div>

@@ -14,7 +14,6 @@ urlpatterns = [
     path('deletecitizen/<int:pk>/', delete_citizen, name='delete-citizen'),
     path('updatecitizen/<int:pk>/', UpdateCitizenView.as_view(), name='update-citizen'),
     path('downloadcsvfile/<int:pk>/', csv_database_write, name='download-csv-file'),
-    path('upload/', FileView, name='file-upload'),
     path('spottedcitizen/', SpottedCitizenView.as_view(), name='spotted-citizen'),
     path('citizenlocation/<int:pk>', citizen_location, name='citizen-location'),
     path('foundcitizen/<int:pk>/', found_citizen, name='found-citizen'),
