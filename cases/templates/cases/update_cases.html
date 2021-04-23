@@ -100,9 +100,10 @@
                             </div>
                             <div class="col-md-6 pl-md-1">
                                 <div class="form-group">
-                                    <label>Phone Number</label>
+                                    <label>Contact Number</label>
                                     {{ form.contact_number }}
                                 </div>
+                                 <span class="text-danger">{{ form.contact_number.errors }}</span>
                             </div>
                         </div>
 
@@ -113,10 +114,12 @@
                                     {{ form.contact_email }}
                                 </div>
                             </div>
+                            <span class="text-danger">{{ form.contact_email.errors }}</span>
+
                             <div class="col-md-6 pl-md-1">
                                 <div class="form-group">
                                     <label>Nationality</label>
-                                    {{ case.nationality }}
+                                    {{ form.nationality }}
                                 </div>
                             </div>
                         </div>

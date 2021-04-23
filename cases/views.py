@@ -1,9 +1,12 @@
+import csv
+
 from django.db import transaction
 from django.shortcuts import render
 from django.contrib import messages
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
+from django.utils import timezone
 
 from .forms import CaseForm, CasesModel
 
@@ -39,6 +42,28 @@ class AddCaseView(CreateView):
 
 
 @login_required
+def download_case(request, pk):
+    try:
+        case = CasesModel.objects.get(pk=pk)
+    except CasesModel.DoesNotExist:
+        messages.error(request, "Case not found")
+        return redirect('cases:list-case')
+
+    # Create the HttpResponse object with the appropriate CSV header.
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="Details.csv"'
+
+    writer = csv.writer(response)
+    writer.writerow(['first_name', 'last_name', 'address', 'nationality', 'contact_number', 'email',
+                     'gender', 'date_of_case', 'status', 'description'])
+
+    writer.writerow([case.first_name, case.last_name, case.address, case.contact_number,
+                     case.nationality, case.description,
+                     case.image, case.status])
+    return response
+
+
+@login_required
 def approve_view(request, pk):
     approve = CasesModel.objects.get(pk=pk)
     approve.is_approved = not approve.is_approved
@@ -51,6 +76,7 @@ class ListCaseView(ListView):
     template_name = 'cases/list_cases.html'
     model = CasesModel
     context_object_name = 'cases'
+    paginate_by = 4
 
 
 @method_decorator(login_required, name='dispatch')
@@ -74,13 +100,6 @@ class FoundCaseView(ListView):
     context_object_name = 'cases'
 
 
-# @method_decorator(login_required, name='dispatch')
-# class DeleteCaseView(DeleteView):
-#     model = CasesModel
-#     template_name = 'cases/cases_confirm_delete.html'
-#     success_url = reverse_lazy('cases:list-case')
-
-
 @login_required
 def delete_case(request, pk):
     try:
@@ -98,24 +117,16 @@ class UpdateCaseView(UpdateView):
     model = CasesModel
     form_class = CaseForm
     template_name = 'cases/update_cases.html'
-    success_url = reverse_lazy('cases:list-case')
     context_object_name = 'case'
 
-    def post(self, request, *args, **kwargs):
-        try:
-            case = self.get_object()
-        except CasesModel.DoesNotExist:
-            case = None
-        case_form = CaseForm(self.request.POST or None, self.request.FILES or None, instance=case)
+    def form_valid(self, form):
+        case = form.save(commit=False)
+        case.updated_by = self.request.user
+        case.updated_at = timezone.now()
+        case.save()
+        return redirect('cases:list-case')
 
-        if case_form.is_valid():
-            with transaction.atomic():
-                cas = case_form.save(commit=False)
-                cas.save()
-                messages.success(request, 'Profile was successfully updated')
-                return redirect('accounts:dashboard')
-        print(case_form.errors)
-        messages.warning(request, 'Please check your credentials')
+
 
 
 

@@ -67,7 +67,6 @@
         <div class="col-lg-4 col-md-6 mt-5">
             <div class="card card-bordered text-center">
                 <i class="fas fa-video fa-10x"></i>
-{#                <img class="card-img-top img-fluid" src="{% static  'assets/img/mike.jpg' %}" alt="image">#}
                 <div class="card-body text-center">
                     <h5 class="title">Detect Using Webcam.</h5>
                     <a href="{% url 'detection:detect-webcam' %}" class="btn btn-dark">Open Webcam</a>
@@ -76,131 +75,18 @@
         </div>
     </div>
 
-{#    <div class="row">#}
-{#        <div class="col-lg-4 col-md-6 mt-5">#}
-{#                <div class="card card-bordered text-center">#}
-{#                    <div class="card-body text-center">#}
-{#                        <a href="{% url 'cases:wanted-list' %}" style="color: red">Wanted</a>#}
-{#                    </div>#}
-{#                </div>#}
-{#            </div>#}
-{##}
-{#        <div class="col-lg-4 col-md-6 mt-5">#}
-{#            <div class="card card-bordered text-center">#}
-{#                <div class="card-body text-center">#}
-{#                    <a href="{% url 'cases:missing-list' %}" style="color: yellow">Missing</a>#}
-{#                </div>#}
-{#            </div>#}
-{#        </div>#}
-{#    </div>#}
-
     <h2 class="mt-5">View Notices</h2>
-{#    <div class="row ">#}
-{#        <div class="offset-lg-2 col-lg-8 col-md-6 mt-5">#}
-{#            <div class="card">#}
-{#                <div class="row no-gutters d-flex align-items-center justify-content-center ">#}
-{#                    <div class="col-auto">#}
-{#                        <img src="{% static 'assets/img/wanted.png' %}" class="img-fluid" alt="" style="height: 200px; width: auto">#}
-{#                    </div>#}
-{#                    <div class="col">#}
-{#                        <div class="card-block px-4">#}
-{#                            <h2 class="card-title text-danger">Wanted</h2>#}
-{#                            <p class="card-text">View and search public Red Notices for wanted persons</p>#}
-{#                            <br>#}
-{#                            <a href="#" class="alert-link mt-3">See notices#}
-{#                                <i class="tim-icons icon-double-right"></i>#}
-{#                            </a>#}
-{#                        </div>#}
-{#                    </div>#}
-{#                </div>#}
-                {#                <div class="card-footer w-100 text-muted">#}
-                {#                    Footer notes#}
-                {#                </div>#}
-{#            </div>#}
-{#        </div>#}
-{#    </div>#}
-{#    <div class="row ">#}
-{#        <div class="offset-lg-2 col-lg-8">#}
-{#            <div class="card">#}
-{#                <div class="row no-gutters d-flex align-items-center justify-content-center ">#}
-{#                    <div class="col">#}
-{#                        <div class="card-block px-4">#}
-{#                            <h2 class="card-title text-warning">Missing</h2>#}
-{#                            <p class="card-text">View and search public Red Notices for wanted persons</p>#}
-{#                            <br>#}
-{#                            <a href="#" class="alert-link mt-3">See notices#}
-{#                                <i class="tim-icons icon-double-right"></i>#}
-{#                            </a>#}
-{#                        </div>#}
-{#                    </div>#}
-{#                    <div class="col-auto">#}
-{#                        <img src="{% static 'assets/img/missing.png' %}" class="img-fluid" alt="" style="height: 200px; width: 180px">#}
-{#                    </div>#}
-{#                </div>#}
-                {#                <div class="card-footer w-100 text-muted">#}
-                {#                    Footer notes#}
-                {#                </div>#}
-{#            </div>#}
-{#        </div>#}
-{#    </div>#}
-{#    <div class="row ">#}
-{#        <div class="offset-lg-2 col-lg-8">#}
-{#            <div class="card">#}
-{#                <div class="row no-gutters d-flex align-items-center justify-content-center ">#}
-{#                    <div class="col-auto">#}
-{#                        <img src="{% static 'assets/img/stranded.jpg' %}" class="img-fluid" alt="" style="height: 200px; width: 180px">#}
-{#                    </div>#}
-{#                    <div class="col">#}
-{#                        <div class="card-block px-4">#}
-{#                            <h2 class="card-title text-info">Stranded</h2>#}
-{#                            <p class="card-text">View and search public Notices for stranded persons</p>#}
-{#                            <br>#}
-{#                            <a href="#" class="alert-link mt-3">See notices#}
-{#                                <i class="tim-icons icon-double-right"></i>#}
-{#                            </a>#}
-{#                        </div>#}
-{#                    </div>#}
-{##}
-{#                </div>#}
-                {#                <div class="card-footer w-100 text-muted">#}
-                {#                    Footer notes#}
-                {#                </div>#}
-{#            </div>#}
-{#        </div>#}
-{#    </div>#}
-
-
     <div class="row ">
-        <div class="col-lg-4 col-md-6">
+        <div class="col-lg-4 col-md-4">
             <div class="card">
                 <div class="row no-gutters d-flex align-items-center justify-content-center ">
                     <div class="col-auto">
-                        <img src="{% static 'assets/img/wanted.png' %}" class="img-fluid" alt="" style="height: 180px; width: 150px">
+                        <img src="{% static 'assets/img/wanted.png' %}" class="img-fluid" alt="" style="height: 200px; width: 130px">
                     </div>
                     <div class="col">
                         <div class="card-block px-4">
                             <h2 class="card-title text-info">Wanted</h2>
-                            <p class="card-text">View and search public Notices for stranded persons</p>
-                            <br>
-                            <a href="{% url 'cases:wanted-list' %}" class="alert-link mt-3">Click Here
-                                <i class="tim-icons icon-double-right"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-lg-4 col-md-6">
-            <div class="card">
-                <div class="row no-gutters d-flex align-items-center justify-content-center ">
-                    <div class="col-auto">
-                        <img src="{% static 'assets/img/missing.png' %}" class="img-fluid" alt="" style="height: 180px; width: 150px">
-                    </div>
-                    <div class="col">
-                        <div class="card-block px-4">
-                            <h2 class="card-title text-info">Missing</h2>
-                            <p class="card-text">View and search public Notices for stranded persons</p>
+                            <p class="card-text">View and search public Notices for wanted criminals</p>
                             <br>
                             <a href="{% url 'cases:missing-list' %}" class="alert-link mt-3">Click Here
                                 <i class="tim-icons icon-double-right"></i>
@@ -211,18 +97,18 @@
             </div>
         </div>
 
-        <div class="col-lg-4 col-md-6">
+        <div class="col-lg-4 col-md-4">
             <div class="card">
                 <div class="row no-gutters d-flex align-items-center justify-content-center ">
                     <div class="col-auto">
-                        <img src="{% static 'assets/img/stranded.jpg' %}" class="img-fluid" alt="" style="height: 180px; width: 150px">
+                        <img src="{% static 'assets/img/missing.png' %}" class="img-fluid" alt="" style="height: 200px; width: 150px">
                     </div>
                     <div class="col">
                         <div class="card-block px-4">
-                            <h2 class="card-title text-info">Stranded</h2>
-                            <p class="card-text">View and search public Notices for stranded persons</p>
+                            <h2 class="card-title text-info">Missing</h2>
+                            <p class="card-text">View and search public Notices for missing persons</p>
                             <br>
-                            <a href="{% url 'cases:found-list' %}" class="alert-link mt-3">Click Here
+                            <a href="{% url 'cases:missing-list' %}" class="alert-link mt-3">Click Here
                                 <i class="tim-icons icon-double-right"></i>
                             </a>
                         </div>
@@ -231,7 +117,27 @@
             </div>
         </div>
 
+        <div class="col-lg-4 col-md-4">
+            <div class="card">
+                <div class="row no-gutters d-flex align-items-center justify-content-center ">
+                    <div class="col-auto">
+                        <img src="{% static 'assets/img/solved.jpg' %}" class="img-fluid" alt="" style="height: 200px; width: 150px">
+                    </div>
+                    <div class="col">
+                        <div class="card-block px-4">
+                            <h2 class="card-title text-info">Closed Cases</h2>
+                            <p class="card-text">View closed cases</p>
+                            <br><br>
+                            <a href="{% url 'cases:found-list' %}" class="alert-link mt-3">Click Here
+                                <i class="tim-icons icon-double-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+
 {% endblock content %}
 {% block javascripts %}
     <script>

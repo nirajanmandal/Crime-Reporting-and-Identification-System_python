@@ -178,7 +178,6 @@ def detect_image(request):
             encodings[i] = face_recognition.face_encodings(images[i])[0]
         except IndexError:
             messages.INFO(request, 'Not able to locate any faces.')
-            print("Not able to locate any faces in at least one of the images. Check the image files. Aborting...")
             return redirect('accounts:dashboard')
 
     # Create arrays of known face encodings and their names
@@ -208,6 +207,7 @@ def detect_image(request):
         matches = face_recognition.compare_faces(known_face_encodings, face_encoding)
 
         name = "Unknown"
+        status = "Unknown"
 
         # If a match was found in known_face_encodings, just use the first one.
         # if True in matches:
@@ -216,11 +216,16 @@ def detect_image(request):
 
         # Or instead, use the known face with the smallest distance to the new face
         face_distances = face_recognition.face_distance(known_face_encodings, face_encoding)
-        best_match_index = np.argmin(face_distances)
+        try:
+            best_match_index = np.argmin(face_distances)
+        except ValueError:
+            messages.INFO(request, 'No image found')
+            return redirect('accounts:dashboard')
         if matches[best_match_index]:
             ca_id = c_id[best_match_index]
             person = CasesModel.objects.filter(id=ca_id)
-            name = known_face_names[best_match_index] + ', status: ' + person.get().status
+            name = known_face_names[best_match_index]
+            status = 'status: ' + person.get().status
             print('found')
 
             if person.get().status == 'Wanted':
@@ -263,6 +268,7 @@ def detect_image(request):
         text_width, text_height = draw.textsize(name)
         draw.rectangle(((left, bottom - text_height - 10), (right, bottom)), fill=(0, 0, 255), outline=(0, 0, 255))
         draw.text((left + 6, bottom - text_height - 5), name, fill=(255, 255, 255, 255))
+        draw.text((left + 6, bottom - text_height + 10), status, fill=(255, 255, 255, 255))
 
     if draw:
         # Remove the drawing library from memory as per the Pillow docs
@@ -362,7 +368,8 @@ def detect_video(request):
                 print("match")
                 ca_id = c_id[best_match_index]
                 person = CasesModel.objects.filter(id=ca_id)
-                name = known_face_names[best_match_index] + ', status: ' + person.get().status
+                name = known_face_names[best_match_index]
+                status = 'status: ' + person.get().status
 
                 if person.get().status == 'Wanted':
                     wanted_citizen = SpottedCitizen.objects.create(
@@ -405,6 +412,7 @@ def detect_video(request):
             cv2.rectangle(frame, (left, bottom - 25), (right, bottom), (0, 0, 255), cv2.FILLED)
             font = cv2.FONT_HERSHEY_DUPLEX
             cv2.putText(frame, name, (left + 6, bottom - 6), font, 0.5, (255, 255, 255), 1)
+            cv2.putText(frame, status, (left + 6, bottom+10), font, 0.5, (255, 255, 255), 1)
 
             cv2.imshow('Video', frame)
 
@@ -484,44 +492,49 @@ def detect_with_webcam(request):
 
             # Or instead, use the known face with the smallest distance to the new face
             face_distances = face_recognition.face_distance(known_face_encodings, face_encoding)
-            best_match_index = np.argmin(face_distances)
-            if matches[best_match_index]:
-                ca_id = c_id[best_match_index]
-                person = CasesModel.objects.filter(id=ca_id)
-                name = known_face_names[best_match_index] + ', status: ' + person.get().status
+            try:
+                best_match_index = np.argmin(face_distances)
+                if matches[best_match_index]:
+                    ca_id = c_id[best_match_index]
+                    person = CasesModel.objects.filter(id=ca_id)
+                    name = known_face_names[best_match_index] + ', status: ' + person.get().status
 
-                if person.get().status == 'Wanted':
-                    wanted_citizen = SpottedCitizen.objects.create(
-                        first_name=person.get().first_name,
-                        last_name=person.get().last_name,
-                        address=person.get().address,
-                        contact_number=person.get().contact_number,
-                        nationality=person.get().nationality,
-                        image=person.get().image,
-                        description=person.get().description,
-                        gender=person.get().gender,
-                        status='Wanted',
-                        latitude='20202020',
-                        longitude='040404040'
-                    )
-                    wanted_citizen.save()
-                elif person.get().status == 'Missing':
-                    missing_citizen = SpottedCitizen.objects.create(
-                        first_name=person.get().first_name,
-                        last_name=person.get().last_name,
-                        address=person.get().address,
-                        contact_number=person.get().contact_number,
-                        nationality=person.get().nationality,
-                        image=person.get().image,
-                        description=person.get().description,
-                        gender=person.get().gender,
-                        status='Missing',
-                        latitude='20202020',
-                        longitude='040404040'
-                    )
-                    missing_citizen.save()
-                else:
-                    pass
+                    if person.get().status == 'Wanted':
+                        wanted_citizen = SpottedCitizen.objects.create(
+                            first_name=person.get().first_name,
+                            last_name=person.get().last_name,
+                            address=person.get().address,
+                            contact_number=person.get().contact_number,
+                            nationality=person.get().nationality,
+                            image=person.get().image,
+                            description=person.get().description,
+                            gender=person.get().gender,
+                            status='Wanted',
+                            latitude='20202020',
+                            longitude='040404040'
+                        )
+                        wanted_citizen.save()
+                    elif person.get().status == 'Missing':
+                        missing_citizen = SpottedCitizen.objects.create(
+                            first_name=person.get().first_name,
+                            last_name=person.get().last_name,
+                            address=person.get().address,
+                            contact_number=person.get().contact_number,
+                            nationality=person.get().nationality,
+                            image=person.get().image,
+                            description=person.get().description,
+                            gender=person.get().gender,
+                            status='Missing',
+                            latitude='20202020',
+                            longitude='040404040'
+                        )
+                        missing_citizen.save()
+                    else:
+                        pass
+
+            except ValueError:
+                messages.warning(request, 'No image found')
+                return redirect('accounts:dashboard')
 
             # Draw a box around the face
             cv2.rectangle(frame, (left, top), (right, bottom), (0, 0, 255), 2)

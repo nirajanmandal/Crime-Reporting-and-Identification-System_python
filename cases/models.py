@@ -35,16 +35,16 @@ class CaseManager(models.Manager):
 
 
 class CasesModel(models.Model):
-    first_name = models.CharField(max_length=50, blank=True, null=True)
-    last_name = models.CharField(max_length=50, blank=True, null=True)
-    address = models.CharField(max_length=100, blank=True, null=True)
+    first_name = models.CharField(max_length=50, blank=False, null=True)
+    last_name = models.CharField(max_length=50, blank=False, null=True)
+    address = models.CharField(max_length=100, blank=False, null=True)
     nationality = models.CharField(max_length=50, blank=False, null=True,)
     contact_email = models.EmailField(max_length=100, blank=True, null=True)
-    date_of_case = models.DateTimeField(blank=True, null=True)
-    contact_number = models.CharField(max_length=13, blank=True, null=True)
+    date_of_case = models.DateField(blank=False, null=True)
+    contact_number = models.CharField(max_length=13, blank=False, null=True)
     image = models.ImageField(blank=False, null=False, upload_to='cases/')
-    gender = models.CharField(max_length=10, choices=GENDER_CHOICES, blank=True, null=True)
-    status = models.CharField(max_length=10, choices=STATUS_CHOICES, blank=False, null=False)
+    gender = models.CharField(max_length=10, choices=GENDER_CHOICES, blank=False, null=True)
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, blank=False, null=True)
     description = models.TextField(max_length=500, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

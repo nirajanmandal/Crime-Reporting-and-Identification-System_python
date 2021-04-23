@@ -19,22 +19,22 @@ STATUS_CHOICES = (
 )
 
 
-class CitizenProfileQueryset(models.QuerySet):
-    def search(self, query=None):
-        qs = self
-        if query is not None:
-            or_lookup = (Q(first_name__icontains=query) | Q(last_name__icontains=query) | Q(
-                status__iexact=query) | Q(gender__iexact=query))
-            qs = qs.filter(or_lookup).distinct()
-        return qs
-
-
-class CitizenProfileManager(models.Manager):
-    def get_queryset(self):
-        return CitizenProfileQueryset(self.model, using=self._db)
-
-    def search(self, query=None):
-        return self.get_queryset().search(query=query)
+# class CitizenProfileQueryset(models.QuerySet):
+#     def search(self, query=None):
+#         qs = self
+#         if query is not None:
+#             or_lookup = (Q(first_name__icontains=query) | Q(last_name__icontains=query) | Q(
+#                 status__iexact=query) | Q(gender__iexact=query))
+#             qs = qs.filter(or_lookup).distinct()
+#         return qs
+#
+#
+# class CitizenProfileManager(models.Manager):
+#     def get_queryset(self):
+#         return CitizenProfileQueryset(self.model, using=self._db)
+#
+#     def search(self, query=None):
+#         return self.get_queryset().search(query=query)
 
 
 class CitizenProfile(models.Model):
@@ -42,9 +42,9 @@ class CitizenProfile(models.Model):
     last_name = models.CharField(max_length=30, blank=False, null=False)
     birth_date = models.DateField()
     address = models.CharField(max_length=100, blank=False, null=False)
-    phone_number = models.BigIntegerField(blank=False, null=False)
+    phone_number = models.CharField(max_length=13, blank=False, null=False)
     nationality = models.CharField(max_length=50, blank=False, null=False)
-    citizenship_number = models.BigIntegerField(blank=False, null=False)
+    citizenship_number = models.CharField(max_length=20, blank=False, null=False)
     citizen_image = models.ImageField(upload_to='citizens/', null=False, blank=False)
     bio = models.TextField(max_length=255, null=False, blank=False)
     gender = models.CharField(max_length=10, choices=GENDER_CHOICES)
@@ -58,7 +58,7 @@ class CitizenProfile(models.Model):
     def __str__(self):
         return self.first_name + ' ' + self.last_name
 
-    objects = CitizenProfileManager()
+    # objects = CitizenProfileManager()
 
 
 class SpottedCitizen(models.Model):
@@ -67,8 +67,7 @@ class SpottedCitizen(models.Model):
     first_name = models.CharField(max_length=30, blank=False, null=False)
     last_name = models.CharField(max_length=30, blank=False, null=False)
     address = models.CharField(max_length=100, blank=False, null=False)
-    # phone_number = models.BigIntegerField(blank=False, null=False
-    contact_number = models.IntegerField(blank=True, null=True)
+    contact_number = models.CharField(max_length=13, blank=True, null=True)
     nationality = models.CharField(max_length=50, blank=False, null=False)
     image = models.ImageField(upload_to='spotted/', null=False, blank=False)
     description = models.TextField(max_length=255, null=False, blank=False)

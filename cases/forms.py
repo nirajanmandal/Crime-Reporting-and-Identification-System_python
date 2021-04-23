@@ -1,5 +1,4 @@
 import re
-
 from django import forms
 from PIL import Image
 # from tempus_dominus.widgets import DateTimePicker
@@ -22,7 +21,7 @@ class CaseForm(forms.ModelForm):
                    'contact_email': forms.EmailInput(attrs={'class': 'form-control'}),
                    'contact_number': forms.TextInput(attrs={'class': 'form-control'}),
                    'nationality': forms.TextInput(attrs={'class': 'form-control'}),
-                   'date_of_case': forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'date'}),
+                   'date_of_case': forms.DateInput(attrs={'class': 'datepicker form-control', 'type': 'date'}),
                    'description': forms.Textarea(attrs={'class': 'form-control'}),
                    }
 

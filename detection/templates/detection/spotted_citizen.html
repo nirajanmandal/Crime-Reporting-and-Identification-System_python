@@ -24,7 +24,9 @@
                                         <th>Status</th>
                                         <th>Date Spotted</th>
                                         <th>Location</th>
-                                        <th>Action</th>
+                                        {% if user.is_staff and user.is_superuser %}
+                                            <th>Action</th>
+                                        {% endif %}
                                         <th>Details</th>
                                     </tr>
                                     </thead>
@@ -40,9 +42,11 @@
                                                 <td>
                                                     <a href="{% url 'detection:citizen-location' citizen.pk %}" class="btn btn-dark btn-sm">Location</a>
                                                 </td>
-                                                <td>
-                                                    <a href="{% url 'detection:found-citizen' citizen.pk %}" class="btn btn-success btn-sm">Found</a>
-                                                </td>
+                                                {% if user.is_staff and user.is_superuser %}
+                                                    <td>
+                                                        <a href="{% url 'detection:found-citizen' citizen.pk %}" class="btn btn-success btn-sm">Found</a>
+                                                    </td>
+                                                {% endif %}
                                                 <td>
                                                     <button type="button" class="btn btn-dark btn-sm" data-toggle="modal" data-target="#id_spotted_citizen{{ citizen.pk }}">
                                                         Details
@@ -86,7 +90,6 @@
                                     {% endfor %}
                                     </tbody>
                                 </table>
-
                             {% if is_paginated %}
                                 <ul class="pagination">
                                     {% if page_obj.has_previous %}

@@ -7,6 +7,7 @@ app_name = 'cases'
 
 urlpatterns = [
     path('addcase/', AddCaseView.as_view(), name='add-case'),
+    path('downloadcase/<int:pk>', download_case, name='download-case'),
     path('approvecase/<int:pk>', approve_view, name='approve-case'),
     path('listcases/', ListCaseView.as_view(), name='list-case'),
     path('wanted-list/', WantedCaseView.as_view(), name='wanted-list'),

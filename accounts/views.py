@@ -23,13 +23,6 @@ from .tokens import account_activation_token
 class UserDashboardView(TemplateView):
     template_name = 'accounts/dashboard.html'
 
-    # def post(self, request, *args, **kwargs):
-    #     if request.user.is_staff and request.user.update_at:
-    #         messages.warning("Please change your password ")
-    #         return redirect('accounts:profile')
-    #     else:
-    #         return render(request, self.template_name)
-
 
 # @method_decorator(staff_member_required, name='dispatch')
 class RegisterUserView(CreateView):

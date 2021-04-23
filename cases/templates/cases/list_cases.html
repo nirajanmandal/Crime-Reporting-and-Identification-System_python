@@ -13,7 +13,7 @@
             <div class="col-12 mt-5">
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="header-title">News</h4>
+                        <h4 class="header-title">Cases</h4>
 
                         <div style="overflow-x:auto;">
                             <table class="table table-dark text-center">
@@ -37,6 +37,7 @@
                                 {% if cases %}
                                     {% for case in cases %}
                                         <tr>
+                                        {% if case.is_approved %}
                                             <td class="col-sm-1"><img src="{{ case.image.url }}" alt="image" class="img-responsive rounded-circle" style="width: 100%"></td>
                                             <td>{{ case.first_name }}</td>
                                             <td>{{ case.last_name }}</td>
@@ -56,9 +57,6 @@
                                                     {% endif %}
                                                 </a>
                                             </td>
-
-
-
                                             <div class="modal fade" id="id_case_approve{{ case.pk }}">
                                                 <div class="modal-dialog">
                                                     <div class="modal-content">
@@ -84,7 +82,6 @@
                                                     </div>
                                                 </div>
                                             </div>
-{#                                            <td>{{ case.status }}</td>#}
                                             {% if user.is_staff and user.is_superuser %}
                                                 <td>
                                                     <a href="{% url 'cases:edit-case' case.id %}">
@@ -107,9 +104,9 @@
                                             <!-- Modal -->
                                             <div class="modal fade" id="id_case_detail{{ case.pk }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
                                                 <div class="modal-dialog" role="document">
-                                                    <div class="modal-content bg-dark text-white">
+                                                    <div class="modal-content">
                                                         <div class="modal-header">
-                                                            <h2 class="modal-title text-white" id="exampleModalLongTitle">Case Details</h2>
+                                                            <h2 class="modal-title" id="exampleModalLongTitle">Case Details</h2>
                                                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                                 <span aria-hidden="true">&times;</span>
                                                             </button>
@@ -119,19 +116,20 @@
                                                             <span class="text-info">Last Name: </span>&emsp;{{ case.last_name }}<br>
                                                             <span class="text-info">Gender: </span>&emsp;{{ case.gender }}<br>
                                                             <span class="text-info">Address: </span>&emsp;{{ case.address }}<br>
-                                                            <span class="text-info">Phone Number: </span>&emsp;{{ case.contact_number }}<br>
+                                                            <span class="text-info">Nationality: </span>&emsp;{{ case.nationality }}<br>
+                                                            <span class="text-info">Contact Number: </span>&emsp;{{ case.contact_number }}<br>
                                                             <span class="text-info">Email: </span>&emsp;{{ case.contact_email }}<br>
                                                             <span class="text-info">Date of case: </span>&emsp;{{ case.date_of_case }}<br>
                                                             <span class="text-info">Description: </span>&emsp;{{ case.description }}<br>
                                                             <span class="text-info">Status: </span>&emsp;{{ case.status }}<br>
 
                                                         </div>
-{#                                                        <div class="modal-footer">#}
-{#                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>#}
-{#                                                            <a href="{% url 'detection:download-csv-file' case.pk %}">#}
-{#                                                                <button type="button" class="btn btn-dark">Download</button>#}
-{#                                                            </a>#}
-{#                                                        </div>#}
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                            <a href="{% url 'cases:download-case' case.pk %}">
+                                                                <button type="button" class="btn btn-dark">Download</button>
+                                                            </a>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -158,6 +156,7 @@
                                                 </div>
                                             </div>
                                         </tr>
+                                        {% endif %}
                                     {% endfor %}
                                 {% else %}
                                     <tr>
@@ -168,6 +167,29 @@
                                 {% endif %}
                                 </tbody>
                             </table>
+
+                            {% if is_paginated %}
+                                <ul class="pagination">
+                                    {% if page_obj.has_previous %}
+                                        <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">&laquo;</a></li>
+                                    {% else %}
+                                        <li class="page-item disabled"><span class="page-link">&laquo;</span></li>
+                                    {% endif %}
+                                    {% for i in paginator.page_range %}
+                                        {% if page_obj.number == i %}
+                                            <li class="page-item active"><span class="page-link">{{ i }}</span></li>
+                                        {% else %}
+                                            <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                                        {% endif %}
+                                    {% endfor %}
+                                    {% if page_obj.has_next %}
+                                        <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">&raquo;</a></li>
+                                    {% else %}
+                                        <li class="page-item disabled"><span class="page-link">&raquo;</span></li>
+                                    {% endif %}
+                                </ul>
+                            {% endif %}
+
                         </div>
                     </div>
                 </div>
