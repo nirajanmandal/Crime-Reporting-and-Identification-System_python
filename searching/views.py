@@ -26,12 +26,12 @@ class SearchView(ListView):
 
         if query is not None:
             cases_results = CasesModel.objects.search(query)
-            # citizen_profile_results = CitizenProfile.objects.search(query)
+            citizen_profile_results = CitizenProfile.objects.search(query)
 
             if request.user.is_staff or request.user.is_superuser:
                 queryset_chain = chain(
                     cases_results,
-                    # citizen_profile_results
+                    citizen_profile_results
                 )
                 qs = sorted(queryset_chain,
                             key=lambda instance: instance.pk,

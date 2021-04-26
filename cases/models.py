@@ -1,6 +1,6 @@
 from django.db import models
 from django.db.models import Q
-from django.urls import reverse
+from django.contrib.auth.models import User
 
 GENDER_CHOICES = (
     ('Male', 'Male'),
@@ -35,17 +35,24 @@ class CaseManager(models.Manager):
 
 
 class CasesModel(models.Model):
-    first_name = models.CharField(max_length=50, blank=False, null=True)
-    last_name = models.CharField(max_length=50, blank=False, null=True)
-    address = models.CharField(max_length=100, blank=False, null=True)
-    nationality = models.CharField(max_length=50, blank=False, null=True,)
-    contact_email = models.EmailField(max_length=100, blank=True, null=True)
-    date_of_case = models.DateField(blank=False, null=True)
-    contact_number = models.CharField(max_length=13, blank=False, null=True)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    title = models.CharField(max_length=100, blank=False, null=True)
+    case_first_name = models.CharField(max_length=50, blank=False, null=True)
+    case_last_name = models.CharField(max_length=50, blank=False, null=True)
+    case_location = models.CharField(max_length=50, blank=False, null=True)
+    date_of_case = models.DateTimeField(blank=False, null=True)
     image = models.ImageField(blank=False, null=False, upload_to='cases/')
-    gender = models.CharField(max_length=10, choices=GENDER_CHOICES, blank=False, null=True)
-    status = models.CharField(max_length=10, choices=STATUS_CHOICES, blank=False, null=True)
-    description = models.TextField(max_length=500, blank=True, null=True)
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, blank=False, null=False)
+    case_description = models.TextField(max_length=500, blank=True, null=True)
+
+    reporter_first_name = models.CharField(max_length=50, blank=False, null=True)
+    reporter_last_name = models.CharField(max_length=50, blank=False, null=True)
+    address = models.CharField(max_length=100, blank=False, null=True)
+    contact_email = models.EmailField(max_length=100, blank=True, null=True)
+    contact_number = models.CharField(max_length=14, blank=False, null=True)
+    gender = models.CharField(max_length=10, choices=GENDER_CHOICES, blank=True, null=True)
+    reporter_description = models.TextField(max_length=500, blank=True, null=True)
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     is_approved = models.BooleanField(default=False)
@@ -54,6 +61,6 @@ class CasesModel(models.Model):
         ordering = ['-updated_at']
 
     def __str__(self):
-        return self.first_name + ' ' + self.last_name
+        return self.title
 
     objects = CaseManager()

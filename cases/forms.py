@@ -1,7 +1,6 @@
 import re
 from django import forms
 from PIL import Image
-# from tempus_dominus.widgets import DateTimePicker
 from .models import *
 
 
@@ -14,16 +13,23 @@ class CaseForm(forms.ModelForm):
     class Meta:
         model = CasesModel
         fields = '__all__'
+        exclude = ['user']
 
-        widgets = {'first_name': forms.TextInput(attrs={'class': 'form-control'}),
-                   'last_name': forms.TextInput(attrs={'class': 'form-control'}),
-                   'address': forms.TextInput(attrs={'class': 'form-control'}),
-                   'contact_email': forms.EmailInput(attrs={'class': 'form-control'}),
-                   'contact_number': forms.TextInput(attrs={'class': 'form-control'}),
-                   'nationality': forms.TextInput(attrs={'class': 'form-control'}),
-                   'date_of_case': forms.DateInput(attrs={'class': 'datepicker form-control', 'type': 'date'}),
-                   'description': forms.Textarea(attrs={'class': 'form-control'}),
-                   }
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-control'}),
+            'case_first_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'case_last_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'case_location': forms.TextInput(attrs={'class': 'form-control'}),
+            'date_of_case': forms.DateInput(attrs={'class': 'datepicker form-control', 'type': 'date'}),
+            'case_description': forms.Textarea(attrs={'class': 'form-control'}),
+
+            'reporter_first_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'reporter_last_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'address': forms.TextInput(attrs={'class': 'form-control'}),
+            'contact_email': forms.EmailInput(attrs={'class': 'form-control'}),
+            'contact_number': forms.TextInput(attrs={'class': 'form-control'}),
+            'reporter_description': forms.Textarea(attrs={'class': 'form-control'}),
+        }
 
     def clean_contact_number(self):
         contact_number = self.cleaned_data.get('contact_number')

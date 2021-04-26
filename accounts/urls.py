@@ -19,6 +19,7 @@ urlpatterns = [
     path('passwordchanged/', UserPasswordChangeDoneView.as_view(), name='password_changed'),
     path('activate/<uidb64>/<token>/', ActivateAccount.as_view(), name='activate'),
     path('profile/<int:pk>', ProfileEditView.as_view(), name='profile'),
+    path('profile-info/<int:pk>', ProfileInfo.as_view(), name='profile-info'),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

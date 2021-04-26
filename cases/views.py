@@ -31,13 +31,16 @@ class AddCaseView(CreateView):
 
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST, request.FILES)
+
         if form.is_valid():
-            # instance = form.save(commit=False)
-            form.save()
+            usercase = form.save(commit=False)
+            usercase.user = self.request.user
+            usercase.save()
             messages.success(request, 'Case added successfully')
             return redirect('accounts:dashboard')
 
         # messages.error(request, 'Please check your credentials again')
+        print(form.errors)
         return render(request, self.template_name, {'form': form})
 
 

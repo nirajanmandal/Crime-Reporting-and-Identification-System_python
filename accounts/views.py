@@ -1,7 +1,7 @@
 from django.contrib.messages.views import SuccessMessageMixin
 from django.db import transaction
 from django.shortcuts import render, redirect, HttpResponseRedirect
-from django.views.generic import View, CreateView, TemplateView, UpdateView, FormView, ListView
+from django.views.generic import View, CreateView, TemplateView, UpdateView, FormView, ListView, DetailView
 from django.contrib.auth.views import LogoutView, PasswordChangeView, PasswordChangeDoneView
 from django.urls import reverse_lazy
 from django.contrib.auth.decorators import login_required
@@ -294,3 +294,10 @@ class StaffUpdateView(SuccessMessageMixin, UpdateView):
         context['user_form'] = user_form
         context['profile'] = profile
         return context
+
+
+@method_decorator(login_required, name='dispatch')
+class ProfileInfo(DetailView):
+    template_name = 'accounts/profile_info.html'
+    model = Profile
+    context_object_name = 'profile_info'

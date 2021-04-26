@@ -27,13 +27,13 @@
                                         <th>First Name</th>
                                         <th>Last Name</th>
                                         <th>Gender</th>
-                                        <th>Date of Case</th>
                                         <th>status</th>
                                         {% if user.is_staff and user.is_superuser %}
                                             <th>Edit</th>
                                             <th>Delete</th>
                                         {% endif %}
                                         <th>Details</th>
+                                        <th>Category</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -52,11 +52,6 @@
                                                     <td>{{ case.first_name }}</td>
                                                     <td>{{ case.last_name }}</td>
                                                     <td>{{ case.gender }}</td>
-                                                    {% if not case.date_of_case %}
-                                                        <td>{{ case.updated_at }}</td>
-                                                    {% else %}
-                                                        <td>{{ case.date_of_case }}</td>
-                                                    {% endif %}
                                                     <td>{{ case.status }}</td>
                                                     {% if user.is_staff and user.is_superuser %}
                                                         <td>
@@ -72,17 +67,17 @@
                                                     {% endif %}
 
                                                     <td>
-                                                        <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#id_case_detail{{ case.pk }}">
-                                                            details
+                                                        <button type="button" class="btn btn-dark btn-sm" data-toggle="modal" data-target="#id_case_detail{{ case.pk }}">
+                                                            Details
                                                         </button>
                                                     </td>
-
+                                                    <td><a href="{% url 'cases:list-case' %}">Case</a></td>
                                                     <!-- Modal -->
                                                     <div class="modal fade" id="id_case_detail{{ case.pk }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
                                                         <div class="modal-dialog" role="document">
-                                                            <div class="modal-content bg-dark text-white">
+                                                            <div class="modal-content">
                                                                 <div class="modal-header">
-                                                                    <h2 class="modal-title text-white" id="exampleModalLongTitle">Case Details</h2>
+                                                                    <h2 class="modal-title" id="exampleModalLongTitle">Case Details</h2>
                                                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                                         <span aria-hidden="true">&times;</span>
                                                                     </button>
@@ -131,8 +126,94 @@
                                                         </div>
                                                     </div>
                                                 </tr>
-                                            {% else%}
-skdfl
+                                            {% endif %}
+                                        {% endwith %}
+                                    {% endfor %}
+                                    {% for citizen in object_list %}
+                                        {% with citizen|class_name as klass %}
+                                            {% if klass == "CitizenProfile"%}
+                                                <tr>
+                                                    <td class="col-sm-1"><img src="{{ citizen.citizen_image.url }}" class="img-responsive rounded-circle" alt="image" style="width: 100%"></td>
+                                                    <td>{{ citizen.first_name }}</td>
+                                                    <td>{{ citizen.last_name }}</td>
+                                                    <td>{{ citizen.gender }}</td>
+                                                    <td>{{ citizen.status }}</td>
+                                                    {% if user.is_staff and user.is_superuser %}
+                                                        <td>
+                                                            <a href="{% url 'detection:update-citizen' citizen.id %}">
+                                                                <span style="color: lightblue"><i class="fas fa-edit"></i></span>
+                                                            </a>
+                                                        </td>
+
+                                                        <td>
+                                                            <a href="#" data-toggle="modal" data-target="#id_citizen_delete{{ citizen.pk }}">
+                                                                <span style="color: crimson" ><i class="fas fa-trash-alt"></i></span>
+                                                            </a>
+                                                        </td>
+                                                    {% endif %}
+
+                                                    <td>
+                                                        <!-- Button trigger modal -->
+                                                        <button type="button" class="btn btn-dark btn-sm" data-toggle="modal" data-target="#id_citizen{{ citizen.pk }}">
+                                                            Details
+                                                        </button>
+                                                    </td>
+                                                    <td><a href="{% url 'detection:view-citizen' %}">Citizen</a></td>
+
+                                                    <!--Details Modal -->
+                                                    <div class="modal fade" id="id_citizen{{ citizen.pk }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                                                        <div class="modal-dialog" role="document">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h2 class="modal-title" id="exampleModalLongTitle">Citizen Details</h2>
+                                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                        <span aria-hidden="true">&times;</span>
+                                                                    </button>
+                                                                </div>
+                                                                <div class="modal-body text-justify">
+                                                                    <span class="text-info">First Name: </span>&emsp;{{ citizen.first_name }}<br>
+                                                                    <span class="text-info">Last Name: </span>&emsp;{{ citizen.last_name }}<br>
+                                                                    <span class="text-info">Gender: </span>&emsp;{{ citizen.gender }}<br>
+                                                                    <span class="text-info">Address: </span>&emsp;{{ citizen.address }}<br>
+                                                                    <span class="text-info">Phone Number: </span>&emsp;{{ citizen.phone_number }}<br>
+                                                                    <span class="text-info">Nationality: </span>&emsp;{{ citizen.nationality }}<br>
+                                                                    <span class="text-info">Citizenship Number: </span>&emsp;{{ citizen.citizenship_number }}<br>
+                                                                    <span class="text-info">Bio: </span>&emsp;{{ citizen.bio }}<br>
+                                                                    <span class="text-info">Status: </span>&emsp;{{ citizen.status }}<br>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                                    <a href="{% url 'detection:download-csv-file' citizen.pk %}">
+                                                                        <button type="button" class="btn btn-dark">Download</button>
+                                                                    </a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <!--Delete Modal -->
+                                                    <div class="modal fade" id="id_citizen_delete{{ citizen.pk }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                                                        <div class="modal-dialog" role="document">
+                                                            <div class="modal-content bg-dark text-white">
+                                                                <div class="modal-header">
+                                                                    <h2 class="modal-title text-white" id="exampleModalLongTitle">Citizen Delete</h2>
+                                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                        <span aria-hidden="true">&times;</span>
+                                                                    </button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <p class="text-white">Are you sure you want to delete "{{ citizen.first_name }}"?</p>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                                    <a href="{% url 'detection:delete-citizen' citizen.pk %}">
+                                                                        <button type="button" class="btn btn-danger">Delete</button>
+                                                                    </a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </tr>
                                             {% endif %}
                                         {% endwith %}
                                     {% endfor %}

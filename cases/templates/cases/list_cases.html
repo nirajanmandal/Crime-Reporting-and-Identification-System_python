@@ -22,11 +22,10 @@
                                     <th>Image</th>
                                     <th>First Name</th>
                                     <th>Last Name</th>
-                                    <th>Gender</th>
                                     <th>Date of Case</th>
                                     <th>status</th>
                                     <th>Approve</th>
-                                    {% if user.is_staff and user.is_superuser %}
+                                    {% if user.is_staff or user.is_superuser %}
                                         <th>Edit</th>
                                         <th>Delete</th>
                                     {% endif %}
@@ -37,11 +36,10 @@
                                 {% if cases %}
                                     {% for case in cases %}
                                         <tr>
-                                        {% if case.is_approved %}
+                                        {% if user.is_superuser or user.is_staff %}
                                             <td class="col-sm-1"><img src="{{ case.image.url }}" alt="image" class="img-responsive rounded-circle" style="width: 100%"></td>
-                                            <td>{{ case.first_name }}</td>
-                                            <td>{{ case.last_name }}</td>
-                                            <td>{{ case.gender }}</td>
+                                            <td>{{ case.case_first_name }}</td>
+                                            <td>{{ case.case_last_name }}</td>
                                             {% if not case.date_of_case %}
                                                 <td>{{ case.updated_at }}</td>
                                             {% else %}
@@ -67,7 +65,11 @@
                                                             </button>
                                                         </div>
                                                         <div class="modal-body">
-                                                            <h4 class="text-dark">Are you sure you want to approve "{{ case.first_name }}"?</h4>
+                                                            {% if not case.is_approved %}
+                                                                <h4 class="text-dark">Are you sure you want to approve this case ?</h4>
+                                                            {% else %}
+                                                                <h4 class="text-dark">Are you sure you want to disapprove this case ?</h4>
+                                                            {% endif %}
                                                         </div>
                                                         <div class="modal-footer">
                                                             <a  type="button" href="{% url 'cases:approve-case' case.pk %}" class="btn btn-dark text-white">
@@ -112,15 +114,13 @@
                                                             </button>
                                                         </div>
                                                         <div class="modal-body">
-                                                            <span class="text-info">First Name: </span>&emsp;{{ case.first_name }}<br>
-                                                            <span class="text-info">Last Name: </span>&emsp;{{ case.last_name }}<br>
-                                                            <span class="text-info">Gender: </span>&emsp;{{ case.gender }}<br>
-                                                            <span class="text-info">Address: </span>&emsp;{{ case.address }}<br>
-                                                            <span class="text-info">Nationality: </span>&emsp;{{ case.nationality }}<br>
-                                                            <span class="text-info">Contact Number: </span>&emsp;{{ case.contact_number }}<br>
-                                                            <span class="text-info">Email: </span>&emsp;{{ case.contact_email }}<br>
+                                                            <span class="text-info">Case filed by: </span>&emsp;<a href="{% url 'accounts:profile-info' case.user.id %}">{{ case.user }}</a><br>
+                                                            <span class="text-info">Case Title: </span>&emsp;{{ case.title }}<br>
+                                                            <span class="text-info">First Name: </span>&emsp;{{ case.case_first_name }}<br>
+                                                            <span class="text-info">Last Name: </span>&emsp;{{ case.case_last_name }}<br>
+                                                            <span class="text-info">Case Location: </span>&emsp;{{ case.case_location }}<br>
                                                             <span class="text-info">Date of case: </span>&emsp;{{ case.date_of_case }}<br>
-                                                            <span class="text-info">Description: </span>&emsp;{{ case.description }}<br>
+                                                            <span class="text-info">Description: </span>&emsp;{{ case.case_description }}<br>
                                                             <span class="text-info">Status: </span>&emsp;{{ case.status }}<br>
 
                                                         </div>
@@ -156,7 +156,127 @@
                                                 </div>
                                             </div>
                                         </tr>
+                                        {% elif case.is_approved and user.is_authenticated %}
+                                        <tr>
+                                            <td class="col-sm-1"><img src="{{ case.image.url }}" alt="image" class="img-responsive rounded-circle" style="width: 100%"></td>
+                                            <td>{{ case.case_first_name }}</td>
+                                            <td>{{ case.case_last_name }}</td>
+                                            {% if not case.date_of_case %}
+                                                <td>{{ case.updated_at }}</td>
+                                            {% else %}
+                                                <td>{{ case.date_of_case }}</td>
+                                            {% endif %}
+                                            <td>{{ case.status }}</td>
+                                            <td>
+                                                <a href="#" {% if user.is_superuser or user.is_staff %} data-toggle="modal" data-target="#id_case_approve{{ case.pk }}" {% endif %}>
+                                                    {% if case.is_approved %}
+                                                        Approved
+                                                    {% else %}
+                                                        Pending
+                                                    {% endif %}
+                                                </a>
+                                            </td>
+                                            <div class="modal fade" id="id_case_approve{{ case.pk }}">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h2 class="modal-title text-white">Approve</h2>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            {% if not case.is_approved %}
+                                                                <h4 class="text-dark">Are you sure you want to approve this case ?</h4>
+                                                            {% else %}
+                                                                <h4 class="text-dark">Are you sure you want to disapprove this case ?</h4>
+                                                            {% endif %}
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <a  type="button" href="{% url 'cases:approve-case' case.pk %}" class="btn btn-dark text-white">
+                                                                {% if case.is_approved %}
+                                                                    Change to pending
+                                                                {% else %}
+                                                                    Approve
+                                                                {% endif %}
+                                                            </a>
+                                                            <button class="btn btn-dark" data-dismiss="modal">Cancel</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {% if user.is_staff or user.is_superuser %}
+                                                <td>
+                                                    <a href="{% url 'cases:edit-case' case.id %}">
+                                                        <span style="color: lightblue"><i class="fas fa-edit"></i></span>
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <a href="#" data-toggle="modal" data-target="#id_case_delete{{ case.pk }}">
+                                                        <span style="color: crimson" ><i class="fas fa-trash-alt"></i></span>
+                                                    </a>
+                                                </td>
+                                            {% endif %}
+
+                                            <td>
+                                                <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#id_case_detail{{ case.pk }}">
+                                                    details
+                                                </button>
+                                            </td>
+
+                                            <!-- Modal -->
+                                            <div class="modal fade" id="id_case_detail{{ case.pk }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                                                <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h2 class="modal-title" id="exampleModalLongTitle">Case Details</h2>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <span class="text-info">Case Title: </span>&emsp;{{ case.title }}<br>
+                                                            <span class="text-info">First Name: </span>&emsp;{{ case.case_first_name }}<br>
+                                                            <span class="text-info">Last Name: </span>&emsp;{{ case.case_last_name }}<br>
+                                                            <span class="text-info">Case Location: </span>&emsp;{{ case.case_location }}<br>
+                                                            <span class="text-info">Date of case: </span>&emsp;{{ case.date_of_case }}<br>
+                                                            <span class="text-info">Description: </span>&emsp;{{ case.case_description }}<br>
+                                                            <span class="text-info">Status: </span>&emsp;{{ case.status }}<br>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <a href="{% url 'cases:download-case' case.pk %}">
+                                                                <button type="button" class="btn btn-dark">Download</button>
+                                                            </a>
+                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!--Delete Modal -->
+                                            <div class="modal fade" id="id_case_delete{{ case.pk }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                                                <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h2 class="modal-title" id="exampleModalLongTitle">Case Delete</h2>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <h4 class="text-dark">Are you sure you want to delete "{{ case.first_name }}"?</h4>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <a href="{% url 'cases:delete-case' case.pk %}">
+                                                                <button type="button" class="btn btn-danger">Delete</button>
+                                                            </a>
+                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         {% endif %}
+                                        </tr>
+
                                     {% endfor %}
                                 {% else %}
                                     <tr>
@@ -189,7 +309,6 @@
                                     {% endif %}
                                 </ul>
                             {% endif %}
-
                         </div>
                     </div>
                 </div>
