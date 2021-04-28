@@ -5,7 +5,7 @@ from cases.models import CasesModel
 
 class FeedbackModel(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
-    # case = models.ForeignKey(CasesModel, on_delete=models.SET_NULL, null=True)
+    case = models.ForeignKey(CasesModel, on_delete=models.SET_NULL, null=True)
     first_name = models.CharField(max_length=30, blank=False, null=False)
     last_name = models.CharField(max_length=30, blank=False, null=False)
     email = models.EmailField(max_length=30, blank=False, null=False)

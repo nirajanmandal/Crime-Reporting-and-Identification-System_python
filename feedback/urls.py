@@ -5,7 +5,7 @@ from .views import *
 
 app_name = 'feedback'
 urlpatterns = [
-    path('feedback/', FeedbackView.as_view(), name='feedback'),
+    path('feedback/<int:case_pk>', FeedbackView.as_view(), name='feedback'),
     path('feedback-info/', FeedbackInfo.as_view(), name='feedback-info'),
 ]
 if settings.DEBUG:

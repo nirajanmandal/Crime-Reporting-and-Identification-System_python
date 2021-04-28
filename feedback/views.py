@@ -24,13 +24,19 @@ class FeedbackView(CreateView):
         else:
             return render(request, self.template_name, {'form': form})
 
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(kwargs)
+        context_data['feedback_count'] = FeedbackModel.objects.all().count()
+        return context_data
+
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST, request.FILES)
-        # obj = FeedbackModel.objects.get()
-        # obj.case = obj.case.id
         if form.is_valid():
+            case_pk = kwargs.get('case_pk')
+            case = CasesModel.objects.get(id=case_pk)
             obj = form.save(commit=False)
             obj.user = self.request.user
+            obj.case = case
             obj.save()
             subject = form.cleaned_data['subject']
             from_email = form.cleaned_data['email']
@@ -44,7 +50,7 @@ class FeedbackView(CreateView):
             except BadHeaderError:
                 return HttpResponse('Invalid header found.')
             messages.success(request, 'Feedback sent successfully')
-            return redirect('feedback:feedback')
+            return redirect('feedback:feedback', case_pk)
 
         return render(request, self.template_name, {'form': form})
 
@@ -54,3 +60,8 @@ class FeedbackInfo(ListView):
     template_name = 'feedback/feedback-info.html'
     model = FeedbackModel
     context_object_name = 'feedback_info'
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data()
+        context_data['feedback_count'] = FeedbackModel.objects.all().count()
+        return context_data

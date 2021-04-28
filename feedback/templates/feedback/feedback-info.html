@@ -1,13 +1,14 @@
 {% extends 'base.html' %}
 
 {% block content %}
+{% for feedback in feedback_info %}
     <div class="row">
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header">
-                    <h5 class="title">Feedback Messages</h5>
+                    <h5 class="title">Feedback Message from {{ feedback.user.username }}</h5><br>
+                    <h5 class="title">{{ feedback.case.title }}</h5>
                 </div>
-                {% for feedback in feedback_info %}
                     <div class="card-body">
                             <div class="row">
                                 <div class="col-md-6 pr-md-1">
@@ -39,17 +40,17 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-6 pl-md-1">
-                                <div class="form-group">
-                                    <label>Message</label>
-                                    {{ feedback.message }}
+                            <div class="row">
+                                <div class="col-md-6 pr-md-1">
+                                    <div class="form-group">
+                                        <label>Message</label>
+                                        {{ feedback.message }}
+                                    </div>
                                 </div>
                             </div>
                     </div>
-                {% endfor %}
             </div>
         </div>
-    {% for feedback in feedback_info %}
         <div class="col-md-4">
             <div class="card card-user">
                 <div class="card-body">
@@ -58,13 +59,11 @@
                         <div class="block block-two"></div>
                         <div class="block block-three"></div>
                         <div class="block block-four"></div>
-                        <img class="avatar" src="{{ feedback.image.url }}" alt="...">
-                        <h5 class="title">{{ feedback.user.username }}</h5>
-{#                        <p class="description">{{ profile_info.user.email }}</p>#}
+                        <img class="avatar" src="{{ feedback.user.profile.profile_image.url }}" alt="...">
                     </div>
                 </div>
             </div>
         </div>
-    {% endfor %}
     </div>
+    {% endfor %}
 {% endblock %}

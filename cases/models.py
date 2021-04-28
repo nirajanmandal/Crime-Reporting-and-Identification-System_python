@@ -46,11 +46,11 @@ class CasesModel(models.Model):
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, blank=False, null=False)
     case_description = models.TextField(max_length=500, blank=True, null=True)
 
-    reporter_first_name = models.CharField(max_length=50, blank=False, null=True)
-    reporter_last_name = models.CharField(max_length=50, blank=False, null=True)
-    address = models.CharField(max_length=100, blank=False, null=True)
+    reporter_first_name = models.CharField(max_length=50, blank=True, null=True)
+    reporter_last_name = models.CharField(max_length=50, blank=True, null=True)
+    address = models.CharField(max_length=100, blank=True, null=True)
     contact_email = models.EmailField(max_length=100, blank=True, null=True)
-    contact_number = models.CharField(max_length=14, blank=False, null=True)
+    contact_number = models.CharField(max_length=14, blank=True, null=True)
     gender = models.CharField(max_length=10, choices=GENDER_CHOICES, blank=True, null=True)
     reporter_description = models.TextField(max_length=500, blank=True, null=True)
 

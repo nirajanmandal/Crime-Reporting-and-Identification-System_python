@@ -62,17 +62,15 @@ class CitizenProfile(models.Model):
 
 
 class SpottedCitizen(models.Model):
-    latitude = models.FloatField()
-    longitude = models.FloatField()
     first_name = models.CharField(max_length=30, blank=False, null=False)
     last_name = models.CharField(max_length=30, blank=False, null=False)
-    address = models.CharField(max_length=100, blank=False, null=False)
-    contact_number = models.CharField(max_length=13, blank=True, null=True)
-    nationality = models.CharField(max_length=50, blank=False, null=False)
+    location = models.CharField(max_length=50, blank=False, null=True)
+    date_of_spotted = models.DateTimeField(blank=False, null=True)
     image = models.ImageField(upload_to='spotted/', null=False, blank=False)
-    description = models.TextField(max_length=255, null=False, blank=False)
-    gender = models.CharField(max_length=10, choices=GENDER_CHOICES)
     status = models.CharField(max_length=30, choices=STATUS_CHOICES)
+    description = models.TextField(max_length=255, null=False, blank=False)
+    latitude = models.FloatField()
+    longitude = models.FloatField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

@@ -135,7 +135,9 @@
                                 <div class="sidebar-submenu">
                                     <ul>
                                         <li>
-                                            <a href="{% url 'feedback:feedback-info'  %}">Feedbacks</a>
+                                            <a href="{% url 'feedback:feedback-info'  %}">Feedbacks
+                                            <span class="badge badge-light">{% if feedback_count %} {{ feedback_count }} {%  else %} 0 {% endif %}</span>
+                                            </a>
                                         </li>
                                     </ul>
                                 </div>

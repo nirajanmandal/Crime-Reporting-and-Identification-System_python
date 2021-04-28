@@ -154,23 +154,14 @@ def detect_image(request):
     names = []
     files = []
     case_id = []
-    # citizenship_number = []
 
     cases = CasesModel.objects.all()
     for crime in cases:
-        images.append(crime.first_name + '_image')
-        encodings.append(crime.first_name + '_face_encoding')
+        images.append(crime.case_first_name + '_image')
+        encodings.append(crime.case_first_name + '_face_encoding')
         files.append(crime.image)
-        names.append(crime.first_name + ' ' + crime.last_name)
+        names.append(crime.case_first_name + ' ' + crime.case_last_name)
         case_id.append(crime.id)
-
-    # citizen = CitizenProfile.objects.all()
-    # for crime in citizen:
-    #     images.append(crime.first_name + '_image')
-    #     encodings.append(crime.first_name + '_face_encoding')
-    #     files.append(crime.citizen_image)
-    #     names.append(crime.first_name + ' ' + crime.last_name)
-    #     citizenship_number.append(crime.citizenship_number)
 
     for i in range(0, len(images)):
         try:
@@ -184,10 +175,6 @@ def detect_image(request):
     known_face_encodings = encodings
     known_face_names = names
     c_id = case_id
-    # c_id = citizenship_number
-
-    # import pdb
-    # pdb.set_trace()
 
     # Load an image with an unknown face
     unknown_image = face_recognition.load_image_file(uploaded_file_url[1:])
@@ -230,14 +217,12 @@ def detect_image(request):
 
             if person.get().status == 'Wanted':
                 wanted_citizen = SpottedCitizen.objects.create(
-                    first_name=person.get().first_name,
-                    last_name=person.get().last_name,
-                    address=person.get().address,
-                    contact_number=person.get().contact_number,
-                    nationality=person.get().nationality,
+                    first_name=person.get().case_first_name,
+                    last_name=person.get().case_last_name,
+                    location=person.get().case_location,
                     image=person.get().image,
-                    description=person.get().description,
-                    gender=person.get().gender,
+                    description=person.get().case_description,
+                    date_of_spotted=person.get().created_at,
                     status='Wanted',
                     latitude=0,
                     longitude=0
@@ -245,14 +230,12 @@ def detect_image(request):
                 wanted_citizen.save()
             elif person.get().status == 'Missing':
                 missing_citizen = SpottedCitizen.objects.create(
-                    first_name=person.get().first_name,
-                    last_name=person.get().last_name,
-                    address=person.get().address,
-                    contact_number=person.get().contact_number,
-                    nationality=person.get().nationality,
+                    first_name=person.get().case_first_name,
+                    last_name=person.get().case_last_name,
+                    location=person.get().case_location,
                     image=person.get().image,
-                    description=person.get().description,
-                    gender=person.get().gender,
+                    description=person.get().case_description,
+                    date_of_spotted=person.get().created_at,
                     status='Missing',
                     latitude=0,
                     longitude=0
