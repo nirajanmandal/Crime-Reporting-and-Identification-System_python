@@ -49,8 +49,8 @@
                                             {% if klass == 'CasesModel' %}
                                                 <tr>
                                                     <td class="col-sm-1"><img src="{{ case.image.url }}" alt="image" class="img-responsive rounded-circle" style="width: 100%"></td>
-                                                    <td>{{ case.first_name }}</td>
-                                                    <td>{{ case.last_name }}</td>
+                                                    <td>{{ case.case_first_name }}</td>
+                                                    <td>{{ case.case_last_name }}</td>
                                                     <td>{{ case.gender }}</td>
                                                     <td>{{ case.status }}</td>
                                                     {% if user.is_staff and user.is_superuser %}
@@ -83,14 +83,14 @@
                                                                     </button>
                                                                 </div>
                                                                 <div class="modal-body">
-                                                                    <span class="text-info">First Name: </span>&emsp;{{ case.first_name }}<br>
-                                                                    <span class="text-info">Last Name: </span>&emsp;{{ case.last_name }}<br>
+                                                                    <span class="text-info">First Name: </span>&emsp;{{ case.case_first_name }}<br>
+                                                                    <span class="text-info">Last Name: </span>&emsp;{{ case.case_last_name }}<br>
                                                                     <span class="text-info">Gender: </span>&emsp;{{ case.gender }}<br>
                                                                     <span class="text-info">Address: </span>&emsp;{{ case.address }}<br>
                                                                     <span class="text-info">Phone Number: </span>&emsp;{{ case.contact_number }}<br>
                                                                     <span class="text-info">Email: </span>&emsp;{{ case.contact_email }}<br>
                                                                     <span class="text-info">Date of case: </span>&emsp;{{ case.date_of_case }}<br>
-                                                                    <span class="text-info">Description: </span>&emsp;{{ case.description }}<br>
+                                                                    <span class="text-info">Description: </span>&emsp;{{ case.case_description }}<br>
                                                                     <span class="text-info">Status: </span>&emsp;{{ case.status }}<br>
 
                                                                 </div>

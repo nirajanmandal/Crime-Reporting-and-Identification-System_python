@@ -123,6 +123,25 @@
                             </a>
                         </li>
 
+                        {% if user.is_superuser %}
+                            <li class="header-menu">
+                                <span>Messages</span>
+                            </li>
+                            <li class="sidebar-dropdown">
+                                <a href="#">
+                                    <i class="fas fa-envelope"></i>
+                                    <span>Messages</span>
+                                </a>
+                                <div class="sidebar-submenu">
+                                    <ul>
+                                        <li>
+                                            <a href="{% url 'feedback:feedback-info'  %}">Feedbacks</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+                        {% endif %}
+
                         <li class="header-menu">
                             <span>Profile</span>
                         </li>

@@ -17,6 +17,7 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.template.loader import render_to_string
 from detection.models import CitizenProfile
 from .tokens import account_activation_token
+from url_encryption import *
 
 
 @method_decorator(login_required, name='dispatch')
@@ -212,7 +213,6 @@ class ProfileEditView(SuccessMessageMixin, UpdateView):
     second_form_class = UserProfileForm
     template_name = 'accounts/profile.html'
     success_url = reverse_lazy('accounts:dashboard')
-    # success_message = 'Profile was successfully updated'
 
     def post(self, request, *args, **kwargs):
         try:
@@ -224,6 +224,7 @@ class ProfileEditView(SuccessMessageMixin, UpdateView):
 
         if user_form.is_valid() and profile_form.is_valid():
             with transaction.atomic():
+
                 user = user_form.save(commit=False)
                 profile = profile_form.save(commit=False)
                 user.save()
@@ -301,3 +302,5 @@ class ProfileInfo(DetailView):
     template_name = 'accounts/profile_info.html'
     model = Profile
     context_object_name = 'profile_info'
+
+

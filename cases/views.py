@@ -1,18 +1,17 @@
 import csv
-
 from django.db import transaction
 from django.shortcuts import render
 from django.contrib import messages
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.utils import timezone
-
 from .forms import CaseForm, CasesModel
-
 from django.views.generic import CreateView, UpdateView, DeleteView, ListView
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
+
+from url_encryption import *
 
 
 @method_decorator(login_required, name='dispatch')
@@ -128,9 +127,3 @@ class UpdateCaseView(UpdateView):
         case.updated_at = timezone.now()
         case.save()
         return redirect('cases:list-case')
-
-
-
-
-
-

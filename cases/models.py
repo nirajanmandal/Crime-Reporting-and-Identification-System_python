@@ -20,7 +20,8 @@ class CaseQueryset(models.QuerySet):
     def search(self, query=None):
         qs = self
         if query is not None:
-            or_lookup = (Q(first_name__icontains=query) | Q(last_name__icontains=query) | Q(address__iexact=query)
+            or_lookup = (Q(case_first_name__icontains=query) | Q(case_last_name__icontains=query)
+                         | Q(address__iexact=query)
                          | Q(status__iexact=query) | Q(gender__iexact=query))
             qs = qs.filter(or_lookup).distinct()
         return qs

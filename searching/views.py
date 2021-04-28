@@ -1,7 +1,3 @@
-from django.shortcuts import render
-
-# Create your views here.
-# search.views.py
 from itertools import chain
 from django.views.generic import ListView
 

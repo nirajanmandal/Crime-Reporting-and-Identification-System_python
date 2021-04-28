@@ -30,6 +30,9 @@
                                         <th>Delete</th>
                                     {% endif %}
                                     <th>Details</th>
+                                    {% if not user.is_staff %}
+                                        <th>Feedback</th>
+                                    {% endif %}
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -49,9 +52,9 @@
                                             <td>
                                                 <a href="#" {% if user.is_superuser or user.is_staff %} data-toggle="modal" data-target="#id_case_approve{{ case.pk }}" {% endif %}>
                                                     {% if case.is_approved %}
-                                                        Approved
+                                                        <i style="color: green" class="fas fa-check-circle"></i>
                                                     {% else %}
-                                                        Pending
+                                                        <i style="color: crimson" class="fas fa-times-circle"></i>
                                                     {% endif %}
                                                 </a>
                                             </td>
@@ -84,7 +87,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            {% if user.is_staff and user.is_superuser %}
+                                            {% if user.is_staff or user.is_superuser %}
                                                 <td>
                                                     <a href="{% url 'cases:edit-case' case.id %}">
                                                         <span style="color: lightblue"><i class="fas fa-edit"></i></span>
@@ -96,11 +99,10 @@
                                                     </a>
                                                 </td>
                                             {% endif %}
-
                                             <td>
-                                                <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#id_case_detail{{ case.pk }}">
-                                                    details
-                                                </button>
+                                                <a href="#" data-toggle="modal" data-target="#id_case_detail{{ case.pk }}">
+                                                    <span style="color: yellow"><i class="fas fa-info-circle"></i></span>
+                                                </a>
                                             </td>
 
                                             <!-- Modal -->
@@ -156,7 +158,7 @@
                                                 </div>
                                             </div>
                                         </tr>
-                                        {% elif case.is_approved and user.is_authenticated %}
+                                        {% elif case.is_approved and not user.is_superuser and not user.is_staff %}
                                         <tr>
                                             <td class="col-sm-1"><img src="{{ case.image.url }}" alt="image" class="img-responsive rounded-circle" style="width: 100%"></td>
                                             <td>{{ case.case_first_name }}</td>
@@ -168,13 +170,13 @@
                                             {% endif %}
                                             <td>{{ case.status }}</td>
                                             <td>
-                                                <a href="#" {% if user.is_superuser or user.is_staff %} data-toggle="modal" data-target="#id_case_approve{{ case.pk }}" {% endif %}>
+                                                <span {% if user.is_superuser or user.is_staff %} data-toggle="modal" data-target="#id_case_approve{{ case.pk }}" {% endif %}>
                                                     {% if case.is_approved %}
-                                                        Approved
+                                                        <i style="color: green" class="fas fa-check-circle"></i>
                                                     {% else %}
                                                         Pending
                                                     {% endif %}
-                                                </a>
+                                                </span>
                                             </td>
                                             <div class="modal fade" id="id_case_approve{{ case.pk }}">
                                                 <div class="modal-dialog">
@@ -219,9 +221,12 @@
                                             {% endif %}
 
                                             <td>
-                                                <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#id_case_detail{{ case.pk }}">
-                                                    details
-                                                </button>
+                                                <a href="#" data-toggle="modal" data-target="#id_case_detail{{ case.pk }}">
+                                                    <span style="color: yellow"><i class="fas fa-info-circle"></i></span>
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <a href="{% url 'feedback:feedback' %}">Send Feedback</a>
                                             </td>
 
                                             <!-- Modal -->
