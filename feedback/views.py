@@ -11,6 +11,7 @@ from feedback.forms import FeedbackForm
 from .models import FeedbackModel
 
 
+@method_decorator(login_required, name='dispatch')
 class FeedbackView(CreateView):
     template_name = 'feedback/feedback.html'
     form_class = FeedbackForm
@@ -66,3 +67,15 @@ class FeedbackInfo(ListView):
         context_data = super().get_context_data()
         context_data['feedback_count'] = FeedbackModel.objects.all().count()
         return context_data
+
+
+@login_required
+def delete_feedback(request, pk):
+    try:
+        feedback = FeedbackModel.objects.get(pk=pk)
+    except FeedbackModel.DoesNotExist:
+        messages.error(request, "Feedback not found")
+        return redirect('cases:list-case')
+    feedback.delete()
+    messages.success(request, "Feedback deleted successfully")
+    return redirect('feedback:feedback-info')

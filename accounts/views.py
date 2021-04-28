@@ -16,6 +16,7 @@ from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.template.loader import render_to_string
 from detection.models import CitizenProfile
+from feedback.models import FeedbackModel
 from .tokens import account_activation_token
 from url_encryption import *
 

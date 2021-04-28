@@ -7,6 +7,7 @@ app_name = 'feedback'
 urlpatterns = [
     path('feedback/<int:case_pk>', FeedbackView.as_view(), name='feedback'),
     path('feedback-info/', FeedbackInfo.as_view(), name='feedback-info'),
+    path('feedback-delete/<int:pk>', delete_feedback, name='feedback-delete'),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

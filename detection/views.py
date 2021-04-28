@@ -215,35 +215,6 @@ def detect_image(request):
             status = 'status: ' + person.get().status
             print('found')
 
-            if person.get().status == 'Wanted':
-                wanted_citizen = SpottedCitizen.objects.create(
-                    first_name=person.get().case_first_name,
-                    last_name=person.get().case_last_name,
-                    location=person.get().case_location,
-                    image=person.get().image,
-                    description=person.get().case_description,
-                    date_of_spotted=person.get().created_at,
-                    status='Wanted',
-                    latitude=0,
-                    longitude=0
-                )
-                wanted_citizen.save()
-            elif person.get().status == 'Missing':
-                missing_citizen = SpottedCitizen.objects.create(
-                    first_name=person.get().case_first_name,
-                    last_name=person.get().case_last_name,
-                    location=person.get().case_location,
-                    image=person.get().image,
-                    description=person.get().case_description,
-                    date_of_spotted=person.get().created_at,
-                    status='Missing',
-                    latitude=0,
-                    longitude=0
-                )
-                missing_citizen.save()
-            else:
-                pass
-
         # Draw a box around the face using the Pillow module
         draw.rectangle(((left, top), (right, bottom)), outline=(0, 0, 255))
 
@@ -354,36 +325,6 @@ def detect_video(request):
                 person = CasesModel.objects.filter(id=ca_id)
                 name = known_face_names[best_match_index]
                 status = 'status: ' + person.get().status
-
-                if person.get().status == 'Wanted':
-                    wanted_citizen = SpottedCitizen.objects.create(
-                        first_name=person.get().case_first_name,
-                        last_name=person.get().case_last_name,
-                        location=person.get().case_location,
-                        image=person.get().image,
-                        description=person.get().case_description,
-                        date_of_spotted=person.get().created_at,
-                        status='Wanted',
-                        latitude=0,
-                        longitude=0
-                    )
-                    wanted_citizen.save()
-                elif person.get().status == 'Missing':
-                    missing_citizen = SpottedCitizen.objects.create(
-                        first_name=person.get().case_first_name,
-                        last_name=person.get().case_last_name,
-                        location=person.get().case_location,
-                        image=person.get().image,
-                        description=person.get().case_description,
-                        date_of_spotted=person.get().created_at,
-                        status='Missing',
-                        latitude=0,
-                        longitude=0
-                    )
-                    missing_citizen.save()
-                else:
-                    pass
-
 
             # Draw a box around the face
             cv2.rectangle(frame, (left, top), (right, bottom), (0, 0, 255), 2)
