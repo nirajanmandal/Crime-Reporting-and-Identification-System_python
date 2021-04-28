@@ -60,6 +60,7 @@ class FeedbackInfo(ListView):
     template_name = 'feedback/feedback-info.html'
     model = FeedbackModel
     context_object_name = 'feedback_info'
+    paginate_by = 3
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data()

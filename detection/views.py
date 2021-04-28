@@ -249,7 +249,7 @@ def detect_image(request):
 
         # Draw a label with a name below the face
         text_width, text_height = draw.textsize(name)
-        draw.rectangle(((left, bottom - text_height - 10), (right, bottom)), fill=(0, 0, 255), outline=(0, 0, 255))
+        draw.rectangle(((left, bottom - text_height - 10), (right, bottom + 15)), fill=(0, 0, 255), outline=(0, 0, 255))
         draw.text((left + 6, bottom - text_height - 5), name, fill=(255, 255, 255, 255))
         draw.text((left + 6, bottom - text_height + 10), status, fill=(255, 255, 255, 255))
 
@@ -293,10 +293,10 @@ def detect_video(request):
 
     citizen = CasesModel.objects.all()
     for crime in citizen:
-        images.append(crime.first_name + '_video')
-        encodings.append(crime.first_name + '_face_encoding')
+        images.append(crime.case_first_name + '_video')
+        encodings.append(crime.case_first_name + '_face_encoding')
         files.append(crime.image)
-        names.append(crime.first_name + crime.last_name)
+        names.append(crime.case_first_name + crime.case_last_name)
         case_id.append(crime.id)
 
     for i in range(0, len(images)):
@@ -338,6 +338,7 @@ def detect_video(request):
             # but I kept it simple for the demo
 
             name = "Unknown"
+            status = "Unknown"
 
             # # If a match was found in known_face_encodings, just use the first one.
             # if True in matches:
@@ -356,14 +357,12 @@ def detect_video(request):
 
                 if person.get().status == 'Wanted':
                     wanted_citizen = SpottedCitizen.objects.create(
-                        first_name=person.get().first_name,
-                        last_name=person.get().last_name,
-                        address=person.get().address,
-                        contact_number=person.get().contact_number,
-                        nationality=person.get().nationality,
+                        first_name=person.get().case_first_name,
+                        last_name=person.get().case_last_name,
+                        location=person.get().case_location,
                         image=person.get().image,
-                        description=person.get().description,
-                        gender=person.get().gender,
+                        description=person.get().case_description,
+                        date_of_spotted=person.get().created_at,
                         status='Wanted',
                         latitude=0,
                         longitude=0
@@ -371,15 +370,13 @@ def detect_video(request):
                     wanted_citizen.save()
                 elif person.get().status == 'Missing':
                     missing_citizen = SpottedCitizen.objects.create(
-                        first_name=person.get().first_name,
-                        last_name=person.get().last_name,
-                        address=person.get().address,
-                        contact_number=person.get().contact_number,
-                        nationality=person.get().nationality,
+                        first_name=person.get().case_first_name,
+                        last_name=person.get().case_last_name,
+                        location=person.get().case_location,
                         image=person.get().image,
-                        description=person.get().description,
-                        gender=person.get().gender,
-                        status='Wanted',
+                        description=person.get().case_description,
+                        date_of_spotted=person.get().created_at,
+                        status='Missing',
                         latitude=0,
                         longitude=0
                     )
@@ -392,19 +389,13 @@ def detect_video(request):
             cv2.rectangle(frame, (left, top), (right, bottom), (0, 0, 255), 2)
 
             # Draw a label with a name below the face
-            cv2.rectangle(frame, (left, bottom - 25), (right, bottom), (0, 0, 255), cv2.FILLED)
+            cv2.rectangle(frame, (left, bottom - 25), (right, bottom + 15), (0, 0, 255), cv2.FILLED)
             font = cv2.FONT_HERSHEY_DUPLEX
             cv2.putText(frame, name, (left + 6, bottom - 6), font, 0.5, (255, 255, 255), 1)
             cv2.putText(frame, status, (left + 6, bottom+10), font, 0.5, (255, 255, 255), 1)
 
             cv2.imshow('Video', frame)
 
-
-        # # Write the resulting image to the output video file
-        # print("Writing frame {} / {}".format(frame_number, length))
-        output_movie.write(frame)
-
-    # All done!
     # myfile.release()
     cv2.destroyAllWindows()
     return redirect('accounts:dashboard')
@@ -425,19 +416,11 @@ def detect_with_webcam(request):
 
     cases = CasesModel.objects.all()
     for crime in cases:
-        images.append(crime.first_name + '_image')
-        encodings.append(crime.first_name + '_face_encoding')
+        images.append(crime.case_first_name + '_image')
+        encodings.append(crime.case_first_name + '_face_encoding')
         files.append(crime.image)
-        names.append(crime.first_name + ' ' + crime.last_name)
+        names.append(crime.case_first_name + ' ' + crime.case_last_name)
         case_id.append(crime.id)
-
-    # citizen = CitizenProfile.objects.all()
-    # for crime in citizen:
-    #     images.append(crime.first_name + '_image')
-    #     encodings.append(crime.first_name + '_face_encoding')
-    #     files.append(crime.citizen_image)
-    #     names.append(crime.first_name + crime.last_name)
-    #     citizenship_number.append(crime.citizenship_number)
 
     for i in range(0, len(images)):
         images[i] = face_recognition.load_image_file(files[i])
@@ -484,32 +467,28 @@ def detect_with_webcam(request):
 
                     if person.get().status == 'Wanted':
                         wanted_citizen = SpottedCitizen.objects.create(
-                            first_name=person.get().first_name,
-                            last_name=person.get().last_name,
-                            address=person.get().address,
-                            contact_number=person.get().contact_number,
-                            nationality=person.get().nationality,
+                            first_name=person.get().case_first_name,
+                            last_name=person.get().case_last_name,
+                            location=person.get().case_location,
                             image=person.get().image,
-                            description=person.get().description,
-                            gender=person.get().gender,
-                            status='Wanted',
-                            latitude='20202020',
-                            longitude='040404040'
+                            description=person.get().case_description,
+                            date_of_spotted=person.get().created_at,
+                            status='Missing',
+                            latitude=0,
+                            longitude=0
                         )
                         wanted_citizen.save()
                     elif person.get().status == 'Missing':
                         missing_citizen = SpottedCitizen.objects.create(
-                            first_name=person.get().first_name,
-                            last_name=person.get().last_name,
-                            address=person.get().address,
-                            contact_number=person.get().contact_number,
-                            nationality=person.get().nationality,
+                            first_name=person.get().case_first_name,
+                            last_name=person.get().case_last_name,
+                            location=person.get().case_location,
                             image=person.get().image,
-                            description=person.get().description,
-                            gender=person.get().gender,
+                            description=person.get().case_description,
+                            date_of_spotted=person.get().created_at,
                             status='Missing',
-                            latitude='20202020',
-                            longitude='040404040'
+                            latitude=0,
+                            longitude=0
                         )
                         missing_citizen.save()
                     else:
@@ -523,7 +502,7 @@ def detect_with_webcam(request):
             cv2.rectangle(frame, (left, top), (right, bottom), (0, 0, 255), 2)
 
             # Draw a label with a name below the face
-            cv2.rectangle(frame, (left, bottom - 35), (right, bottom), (0, 0, 255), cv2.FILLED)
+            cv2.rectangle(frame, (left, bottom - 35), (right, bottom + 15), (0, 0, 255), cv2.FILLED)
             font = cv2.FONT_HERSHEY_DUPLEX
             cv2.putText(frame, name, (left + 6, bottom - 6), font, 1.0, (255, 255, 255), 1)
 
