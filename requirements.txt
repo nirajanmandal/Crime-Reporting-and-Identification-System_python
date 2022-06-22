@@ -11,7 +11,7 @@ ipdb==0.13.4
 ipython==7.19.0
 ipython-genutils==0.2.0
 jedi==0.17.2
-numpy==1.19.4
+numpy==1.22.0
 opencv-python~=4.5.1.48
 parso==0.7.1
 pexpect==4.8.0
@@ -37,7 +37,7 @@ face-recognition-models==0.3.0
 ipython==7.19.0
 ipython-genutils==0.2.0
 jedi==0.17.2
-numpy==1.19.4
+numpy==1.22.0
 opencv-python==4.5.1.48
 parso==0.7.1
 pexpect==4.8.0
@@ -63,7 +63,7 @@ face-recognition-models==0.3.0
 ipython==7.19.0
 ipython-genutils==0.2.0
 jedi==0.17.2
-numpy==1.19.4
+numpy==1.22.0
 opencv-python==4.5.1.48
 parso==0.7.1
 pexpect==4.8.0
