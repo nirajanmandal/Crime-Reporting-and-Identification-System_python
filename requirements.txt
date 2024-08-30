@@ -38,7 +38,7 @@ ipython==7.19.0
 ipython-genutils==0.2.0
 jedi==0.17.2
 numpy==1.19.4
-opencv-python==4.5.1.48
+opencv-python==4.8.1.78
 parso==0.7.1
 pexpect==4.8.0
 pickleshare==0.7.5
@@ -64,7 +64,7 @@ ipython==7.19.0
 ipython-genutils==0.2.0
 jedi==0.17.2
 numpy==1.19.4
-opencv-python==4.5.1.48
+opencv-python==4.8.1.78
 parso==0.7.1
 pexpect==4.8.0
 pickleshare==0.7.5
